@@ -4,12 +4,28 @@ class Set
 {
     public List<Entity> Members {get; set;} = new List<Entity>();
 
-    public Set(int entities)
+    public int MemberCount {get => Members.Count();}
+    public double AverageMagicNumber { get => Members.Average(ent => ent.MagicNumber);}
+    public int MinMagicNumber { get => Members.Min(ent => ent.MagicNumber);}
+    public int MaxMagicNumber { get => Members.Max(ent => ent.MagicNumber);}
+
+    public Set(int entities) : this(entities, true) {}
+    public Set(int entities, bool randomize)
     {
-        for (int i = 0; i < entities; i++)
+        if (randomize) 
         {
-            this.Members.Add(new Entity());
+            for (int i = 0; i < entities; i++)
+                this.Members.Add(new Entity());
         }
+        else 
+        {
+            for (int i = 0; i < entities; i++)
+                this.Members.Add(new Entity(0));
+        }
+    }
+    public Set(List<Entity> entityList)
+    {
+        Members = entityList;
     }
 
     public List<int> AllMagicNumbers()
