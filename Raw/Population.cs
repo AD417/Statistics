@@ -36,7 +36,7 @@ class Population : Set
     {
         string export = "";
         for (int i = 0; i < MemberCount; i++)
-            export += i.ToString() + ", " + Members[i].MagicNumber.ToString() + "\n";
+            export += Members[i].MagicNumber.ToString() + "\n";
         
         File.WriteAllText(filePath, export);
     }
@@ -49,9 +49,11 @@ class Population : Set
 
         for (int i = 0; i < importByEntity.Length; i++)
         {
-            string[] values = importByEntity[i].Split(", ");
-            if (values.Length < 2) continue;
-            entities.Add(new Entity(Int32.Parse(values[1])));
+            string line = importByEntity[i];
+            if (line.Length == 0) continue;
+            string[] values = line.Split(", ");
+            if (values.Length < 1) continue;
+            entities.Add(new Entity(Int32.Parse(values[0])));
         }
         return new Population(entities);    
     }

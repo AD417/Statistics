@@ -1,6 +1,6 @@
 namespace Statistics;
 
-class Entity //: IComparable<Entity>
+class Entity : IComparable<Entity>
 {
     public int MagicNumber {get; set;}
     public int MagicSecondNumber {get; set;}
@@ -32,6 +32,8 @@ class Entity //: IComparable<Entity>
     }
     public bool Equals(Entity ent) => this.MagicNumber == ent.MagicNumber;
     public override int GetHashCode() => base.GetHashCode();
+
+    // Screw it, IComparable. 
     public int CompareTo(Entity? other) 
     {
         if (ReferenceEquals(null, other)) return this.MagicNumber;

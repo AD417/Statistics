@@ -2,7 +2,7 @@ namespace Statistics;
 
 class Set
 {
-    protected List<Entity> Members {get; set;} = new List<Entity>();
+    public List<Entity> Members {get; set;} = new List<Entity>();
 
     public int MemberCount {get => Members.Count();}
     public double AverageMagicNumber { get => Members.Average(ent => ent.MagicNumber);}

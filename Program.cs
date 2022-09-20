@@ -6,22 +6,27 @@ class World
 {
     public static int Main()
     {
-        System.Console.WriteLine("Testing, Cat!");
+        System.Console.WriteLine("Loading data from file...");
 
-        Population World = Population.ImportFromCSV("File.csv");
+        Population World = Population.ImportFromCSV("example1.csv");
+        FrequencyDistribution dist = new FrequencyDistribution(World, 7);
 
-        System.Console.WriteLine("There are {0} entities on this world.", World.MemberCount);
-        System.Console.WriteLine("Their average MagicNumber is {0}.", World.AverageMagicNumber);
+        System.Console.WriteLine("Sample size: {0}", dist.Size);
+        System.Console.WriteLine("Range: {0} ({1}-{2}).", dist.Range, dist.Min, dist.Max);
+        System.Console.WriteLine("Class Size: {0}", dist.IntervalWidth);
+        dist.PrintData();
 
-        Sample survey = World.SampleEntities(0.05);
+        System.Console.WriteLine("Loading data from file...");
 
-        System.Console.WriteLine(String.Format(
-            "The average MagicNumber of a sample consisting of 5% of these entities was {0}.", 
-            survey.AverageMagicNumber
-        ));
+        World = Population.ImportFromCSV("example2.csv");
+        dist = new FrequencyDistribution(World, 6);
 
-        World.ExportToCSV("File.csv");
+        System.Console.WriteLine("Sample size: {0}", dist.Size);
+        System.Console.WriteLine("Range: {0} ({1}-{2}).", dist.Range, dist.Min, dist.Max);
+        System.Console.WriteLine("Class Size: {0}", dist.IntervalWidth);
+        dist.PrintData();
 
+        dist.ExportToCSV("Export.csv");
 
         return 0;
     }

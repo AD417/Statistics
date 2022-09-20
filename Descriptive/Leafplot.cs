@@ -1,0 +1,6 @@
+namespace Statistics;
+
+class Leafplot
+{
+    
+}
