@@ -1,5 +1,8 @@
-namespace Statistics;
+using Plotly.NET.CSharp;
+using Plotly.NET.TraceObjects;
 
+namespace Statistics;
+    
 class FrequencyDistribution : DataSummary
 {
     public int IntervalWidth {get; }
@@ -9,6 +12,8 @@ class FrequencyDistribution : DataSummary
     public int[] CumulativeFrequency {get; }
     public decimal[] RelativeFrequency {get; }
     public int[] Frequency {get; }
+
+    private Set RawData {get; }
 
     public FrequencyDistribution(Set data, int intervalCount) : base(data)
     {
@@ -40,9 +45,10 @@ class FrequencyDistribution : DataSummary
             RelativeFrequency[i] = (decimal)Frequency[i] / Size;
         }
         
+        RawData = data;
     }
 
-    public void PrintData()
+    public void PrintChart()
     {
         string data = "";
         string[] headers = "Bounds, Mid, Freq, R.F., C.F.".Split(", ");
@@ -103,6 +109,27 @@ class FrequencyDistribution : DataSummary
         data += blankRow;
 
         System.Console.WriteLine(data);
+    }
+
+    public void DisplayHistogram()
+    {
+        double[] MagicNumbersRaw = new double[Size];
+        for (int i = 0; i < Size; i++)
+        {
+            Entity e = RawData.Members[i];
+            MagicNumbersRaw[i] = (double) e.MagicNumber;
+        }
+        Bins bins = Bins.init(Min, Max, IntervalWidth);
+
+        Chart.Histogram<double, double, string>(
+            X: MagicNumbersRaw, 
+            Line: Plotly.NET.Line.init(Color: Plotly.NET.Color.fromHex("000000"), Width: 1),
+            XBins: bins
+        )
+            .WithTraceInfo("Testcat", ShowLegend: true)
+            .WithXAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("MagicNumber"))
+            .WithYAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("Frequency"))
+            .Show();
     }
 
     public void ExportToCSV(string filePath) 

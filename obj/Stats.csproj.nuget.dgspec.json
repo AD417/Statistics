@@ -1,0 +1,71 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/alexander/Documents/csharp/Stats/Stats.csproj": {}
+  },
+  "projects": {
+    "/home/alexander/Documents/csharp/Stats/Stats.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/alexander/Documents/csharp/Stats/Stats.csproj",
+        "projectName": "Stats",
+        "projectPath": "/home/alexander/Documents/csharp/Stats/Stats.csproj",
+        "packagesPath": "/home/alexander/.nuget/packages/",
+        "outputPath": "/home/alexander/Documents/csharp/Stats/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/alexander/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Plotly.NET": {
+              "target": "Package",
+              "version": "[3.0.0, )"
+            },
+            "Plotly.NET.CSharp": {
+              "target": "Package",
+              "version": "[0.8.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/6.0.401/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

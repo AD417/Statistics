@@ -7,4 +7,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Plotly.NET" Version="3.0.0" />
+    <PackageReference Include="Plotly.NET.CSharp" Version="0.8.0" />
+  </ItemGroup>
+
 </Project>

@@ -3,6 +3,7 @@ namespace Statistics;
 class DataSummary
 {
     public int Size {get; }
+    public int Sum {get; }
     public int Min {get; }
     public int Max {get; }
     public double Average {get; }
@@ -17,6 +18,7 @@ class DataSummary
         Max = data.MaxMagicNumber;
         Range = Max - Min;
         Average = data.AverageMagicNumber;
+        Sum = (int)Average * Size;
         if (data.Members.Count == 0) 
         {
             Median = 0;
