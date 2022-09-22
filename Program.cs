@@ -8,7 +8,9 @@ class World
         System.Console.WriteLine("Loading data from file...");
 
         Population World = Population.ImportFromCSV("testcat.csv");
-        FrequencyDistribution dist = new FrequencyDistribution(World, 5);
+        // Leafplot plot = new Leafplot(World);
+        // plot.PrintPlot();
+        FrequencyDistribution dist = new FrequencyDistribution(World, 7);
 
         System.Console.WriteLine("Sample size: {0}", dist.Size);
         System.Console.WriteLine("Range: {0} ({1}-{2}).", dist.Range, dist.Min, dist.Max);

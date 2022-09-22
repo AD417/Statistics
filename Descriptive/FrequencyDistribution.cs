@@ -119,11 +119,11 @@ class FrequencyDistribution : DataSummary
             Entity e = RawData.Members[i];
             MagicNumbersRaw[i] = (double) e.MagicNumber;
         }
-        Bins bins = Bins.init(Min, Max, IntervalWidth);
+        Bins bins = Bins.init(Min, Max, IntervalCount);
 
         Chart.Histogram<double, double, string>(
             X: MagicNumbersRaw, 
-            Line: Plotly.NET.Line.init(Color: Plotly.NET.Color.fromHex("000000"), Width: 1),
+            // Line: Plotly.NET.Line.init(Color: Plotly.NET.Color.fromHex("000000"), Width: 1),
             XBins: bins
         )
             .WithTraceInfo("Testcat", ShowLegend: true)
