@@ -1,5 +1,3 @@
-using System.IO;
-
 namespace Statistics;
 
 class Population : Set

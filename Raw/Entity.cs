@@ -11,10 +11,11 @@ class Entity : IComparable<Entity>
     public Entity(int MagicNumber, int MagicSecondNumber)
     {
         this.MagicNumber = MagicNumber;
+        // Will I ever use the second magic number? 
         this.MagicSecondNumber = 100 - (MagicSecondNumber * MagicSecondNumber / 100);
     }
 
-    // This was a waste of time. If something breaks, feel free to remove this. 
+    // Comparison operators that are useless, but I'm too lazy to remove. 
     public static bool operator >(Entity a, Entity b) => a.MagicNumber > b.MagicNumber;
     public static bool operator <(Entity a, Entity b) => a.MagicNumber < b.MagicNumber;
     public static bool operator ==(Entity a, Entity b) => a.MagicNumber == b.MagicNumber;

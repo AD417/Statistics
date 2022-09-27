@@ -17,7 +17,7 @@ class DataSummary
         Min = data.MinMagicNumber;
         Max = data.MaxMagicNumber;
         Range = Max - Min;
-        Average = data.AverageMagicNumber;
+        Average = data.MeanMagicNumber;
         Sum = (int)Average * Size;
         if (data.Members.Count == 0) 
         {

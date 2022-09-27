@@ -1,5 +1,4 @@
 using Plotly.NET.CSharp;
-using Plotly.NET.TraceObjects;
 
 namespace Statistics;
     
@@ -13,12 +12,10 @@ class FrequencyDistribution : DataSummary
     public decimal[] RelativeFrequency {get; }
     public int[] Frequency {get; }
 
-    private Set RawData {get; }
-
     public FrequencyDistribution(Set data, int intervalCount) : base(data)
     {
         IntervalCount = intervalCount;
-        IntervalWidth = (int)Math.Ceiling((decimal) Range / IntervalCount);
+        IntervalWidth = (int)Math.Ceiling((double) Range / IntervalCount);
 
         Intervals = new int[IntervalCount, 2];
         Midpoint = new double[IntervalCount];
@@ -44,8 +41,6 @@ class FrequencyDistribution : DataSummary
         {
             RelativeFrequency[i] = (decimal)Frequency[i] / Size;
         }
-        
-        RawData = data;
     }
 
     public void PrintChart()

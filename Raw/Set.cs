@@ -5,7 +5,7 @@ class Set
     public List<Entity> Members {get; set;} = new List<Entity>();
 
     public int MemberCount {get => Members.Count();}
-    public double AverageMagicNumber { get => Members.Average(ent => ent.MagicNumber);}
+    public double MeanMagicNumber { get => Members.Average(ent => ent.MagicNumber);}
     public int MinMagicNumber { get => Members.Min(ent => ent.MagicNumber);}
     public int MaxMagicNumber { get => Members.Max(ent => ent.MagicNumber);}
 
