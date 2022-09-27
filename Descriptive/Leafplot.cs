@@ -7,6 +7,24 @@ class Leafplot : DataSummary
     public int SmallestStem {get; } 
     public List<List<int>> Leaves {get; }
 
+    private string Plot {
+        get {
+            string output = "";
+            for (int i = 0; i < Stems; i++)
+            {
+                List<int> Leaf = Leaves[i];
+
+                string line = (i + SmallestStem).ToString().PadLeft(StemSize >= 10 ? 2 : 1) + " |";
+                foreach (int value in Leaf)
+                {
+                    line += " " + value.ToString();
+                }
+                output += line + "\n";
+            }
+            return output;
+        }
+    }
+
     public Leafplot(Set data) : base(data)
     {
         StemSize = (int) (Math.Log10(data.MaxMagicNumber) - 0.2);
@@ -27,16 +45,10 @@ class Leafplot : DataSummary
     }
     public void PrintPlot() 
     {
-        for (int i = 0; i < Stems; i++)
-        {
-            List<int> Leaf = Leaves[i];
-
-            string line = (i + SmallestStem).ToString().PadLeft(StemSize >= 10 ? 2 : 1) + " |";
-            foreach (int value in Leaf)
-            {
-                line += " " + value.ToString();
-            }
-            System.Console.WriteLine(line);
-        }
+        System.Console.WriteLine(Plot);
+    }
+    public void ExportToFile(string filePath)
+    {
+        File.WriteAllText(filePath, Plot);
     }
 }
