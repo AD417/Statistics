@@ -7,7 +7,7 @@ class Program
         System.Console.WriteLine("Loading Sample / Population data from file...");
 
         Population World = Population.ImportFromCSV("example1.csv");
-        Leafplot plot = new Leafplot(World);
+        Dotplot plot = new Dotplot(World);
         plot.PrintPlot();
         // FrequencyDistribution dist = new FrequencyDistribution(World, 6);
 // 
