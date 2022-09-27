@@ -19,7 +19,6 @@ class FrequencyDistribution : DataSummary
     {
         IntervalCount = intervalCount;
         IntervalWidth = (int)Math.Ceiling((decimal) Range / IntervalCount);
-        System.Console.WriteLine(IntervalWidth);
 
         Intervals = new int[IntervalCount, 2];
         Midpoint = new double[IntervalCount];
@@ -35,7 +34,6 @@ class FrequencyDistribution : DataSummary
         for (int i = 0; i < data.MemberCount; i++) 
         {
             int firstIndex = (data.Members[i].MagicNumber - Min) / IntervalWidth;
-            System.Console.WriteLine(data.Members[i].MagicNumber);
             Frequency[firstIndex]++;
             for (int j = firstIndex; j < IntervalCount; j++)
                 CumulativeFrequency[j]++;
@@ -140,23 +138,60 @@ class FrequencyDistribution : DataSummary
             .WithXAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("MagicNumber"))
             .WithYAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("Frequency"))
             .Show();
+    }
 
-        // double[] MagicNumbersRaw = new double[Size];
-        // for (int i = 0; i < Size; i++)
-        // {
-        //     Entity e = RawData.Members[i];
-        //     MagicNumbersRaw[i] = (double) e.MagicNumber;
-        // }
-        // Bins bins = Bins.init(Min, Max, IntervalCount);
-        // Chart.Histogram<double, double, string>(
-        //     X: MagicNumbersRaw, 
-        //     // Line: Plotly.NET.Line.init(Color: Plotly.NET.Color.fromHex("000000"), Width: 1),
-        //     XBins: bins
-        // )
-        //     .WithTraceInfo("Testcat", ShowLegend: true)
-        //     .WithXAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("MagicNumber"))
-        //     .WithYAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("Frequency"))
-        //     .Show();
+    public void DisplayPolygonGraph() => DisplayFrequencyLineGraph();
+    public void DisplayFrequencyLineGraph() 
+    {
+        // Line graphs require us to have a point of 0 at the beginning and end. 
+        // These points occur one midpoint above and below the ends of the data.
+
+        // Midpoints, including the ones we add to the start and end. 
+        double[] LineGraphDataX = new double[Midpoint.Length + 2];
+        // Frequency including the zeroes at the beginning and end. 
+        double[] LineGraphDataY = new double[Midpoint.Length + 2];
+
+        LineGraphDataX[0] = Midpoint[0] - IntervalWidth;
+        LineGraphDataX[LineGraphDataX.Length - 1] = Midpoint[Midpoint.Length - 1] + IntervalWidth;
+
+        for (int i = 0; i < Midpoint.Length; i++)
+        {
+            LineGraphDataX[i + 1] = Midpoint[i];
+            LineGraphDataY[i + 1] = Frequency[i];
+        }
+
+        Chart.Line<double, double, string>(
+            x: LineGraphDataX,
+            y: LineGraphDataY
+        )
+            .WithXAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("MagicNumber"))
+            .WithYAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("Frequency"))
+            .Show();
+    }
+
+    public void DisplayOgive() => DisplayCumulativeFrequencyLineGraph();
+    public void DisplayCumulativeFrequencyLineGraph()
+    {
+        // Midpoints, including the one we add to the start. 
+        double[] LineGraphDataX = new double[Midpoint.Length + 1];
+        // Frequency including the zeroe at the beginning. 
+        double[] LineGraphDataY = new double[Midpoint.Length + 1];
+
+        LineGraphDataX[0] = Midpoint[0] - IntervalWidth;
+
+        for (int i = 0; i < Midpoint.Length; i++)
+        {
+            LineGraphDataX[i + 1] = Midpoint[i];
+            LineGraphDataY[i + 1] = CumulativeFrequency[i];
+        }
+
+        Chart.Line<double, double, string>(
+            x: LineGraphDataX,
+            y: LineGraphDataY
+        )
+            .WithXAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("MagicNumber"))
+            .WithYAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("Frequency"))
+            .Show();
     }
 
     public void ExportToCSV(string filePath) 

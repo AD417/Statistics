@@ -16,7 +16,10 @@ class World
         System.Console.WriteLine("Range: {0} ({1}-{2}).", dist.Range, dist.Min, dist.Max);
         System.Console.WriteLine("Class Size: {0}", dist.IntervalWidth);
         dist.PrintChart();
-        dist.DisplayRelativeFrequencyHistogram();
+        // dist.DisplayFrequencyHistogram();
+        // dist.DisplayRelativeFrequencyHistogram();
+        // dist.DisplayFrequencyLineGraph();
+        dist.DisplayOgive();
         dist.ExportToCSV("Export2.csv");
 
         return 0;
