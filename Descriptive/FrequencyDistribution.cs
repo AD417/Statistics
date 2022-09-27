@@ -19,6 +19,7 @@ class FrequencyDistribution : DataSummary
     {
         IntervalCount = intervalCount;
         IntervalWidth = (int)Math.Ceiling((decimal) Range / IntervalCount);
+        System.Console.WriteLine(IntervalWidth);
 
         Intervals = new int[IntervalCount, 2];
         Midpoint = new double[IntervalCount];
@@ -34,6 +35,7 @@ class FrequencyDistribution : DataSummary
         for (int i = 0; i < data.MemberCount; i++) 
         {
             int firstIndex = (data.Members[i].MagicNumber - Min) / IntervalWidth;
+            System.Console.WriteLine(data.Members[i].MagicNumber);
             Frequency[firstIndex]++;
             for (int j = firstIndex; j < IntervalCount; j++)
                 CumulativeFrequency[j]++;
@@ -111,25 +113,50 @@ class FrequencyDistribution : DataSummary
         System.Console.WriteLine(data);
     }
 
-    public void DisplayHistogram()
+    public void DisplayFrequencyHistogram()
     {
-        double[] MagicNumbersRaw = new double[Size];
-        for (int i = 0; i < Size; i++)
-        {
-            Entity e = RawData.Members[i];
-            MagicNumbersRaw[i] = (double) e.MagicNumber;
-        }
-        Bins bins = Bins.init(Min, Max, IntervalCount);
-
-        Chart.Histogram<double, double, string>(
-            X: MagicNumbersRaw, 
-            // Line: Plotly.NET.Line.init(Color: Plotly.NET.Color.fromHex("000000"), Width: 1),
-            XBins: bins
+        // I am actually cheating a LOT with this "Histogram" -- it's actually a bar graph. 
+        Chart.Column<double, double, string>(
+            // Casting shenanigans because Frequency is stored as an int. 
+            Frequency.Select(x => (double)x).ToArray(),
+            // The "center" of the histogram bars. On paper, it's a bad idea because you can make mistakes this way,
+            // but the thing's a computer, and won't screw up unless we give it bad data. 
+            Keys: Midpoint,
+            // The lynchpin: by setting the width to the width of an interval, we leave no gaps between the bars. 
+            // Maybe there is a gap, but that can be chalked up to styling. 
+            Width: IntervalWidth
         )
-            .WithTraceInfo("Testcat", ShowLegend: true)
             .WithXAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("MagicNumber"))
             .WithYAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("Frequency"))
             .Show();
+    }
+    public void DisplayRelativeFrequencyHistogram()
+    {
+        Chart.Column<double, double, string>(
+            RelativeFrequency.Select(x => (double)x).ToArray(),
+            Keys: Midpoint,
+            Width: IntervalWidth
+        )
+            .WithXAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("MagicNumber"))
+            .WithYAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("Frequency"))
+            .Show();
+
+        // double[] MagicNumbersRaw = new double[Size];
+        // for (int i = 0; i < Size; i++)
+        // {
+        //     Entity e = RawData.Members[i];
+        //     MagicNumbersRaw[i] = (double) e.MagicNumber;
+        // }
+        // Bins bins = Bins.init(Min, Max, IntervalCount);
+        // Chart.Histogram<double, double, string>(
+        //     X: MagicNumbersRaw, 
+        //     // Line: Plotly.NET.Line.init(Color: Plotly.NET.Color.fromHex("000000"), Width: 1),
+        //     XBins: bins
+        // )
+        //     .WithTraceInfo("Testcat", ShowLegend: true)
+        //     .WithXAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("MagicNumber"))
+        //     .WithYAxisStyle<double, double, string>(Title: Plotly.NET.Title.init("Frequency"))
+        //     .Show();
     }
 
     public void ExportToCSV(string filePath) 
