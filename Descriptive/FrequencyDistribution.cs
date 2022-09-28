@@ -43,6 +43,12 @@ class FrequencyDistribution : DataSummary
         }
     }
 
+    public void Summarize()
+    {
+        System.Console.WriteLine("Sample size: {0}", Size);
+        System.Console.WriteLine("Total Range: {0} ({1}-{2}).", Range, Min, Max);
+        System.Console.WriteLine("Class Size: {0}", IntervalWidth);
+    }
     public void PrintChart()
     {
         string data = "";

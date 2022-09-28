@@ -27,7 +27,8 @@ class Leafplot : DataSummary
 
     public Leafplot(Set data) : base(data)
     {
-        StemSize = (int) (Math.Log10(data.MaxMagicNumber - data.MinMagicNumber) - 0.2);
+        // TODO: figure out why this stemsize thing SUCKS. 
+        StemSize = (int) Math.Max((Math.Log10(data.MaxMagicNumber - data.MinMagicNumber) - 0.2), (Math.Log10(data.MaxMagicNumber) - 0.2));
         int pow10StemSize = (int) Math.Pow(10, StemSize);
 
         SmallestStem = data.MinMagicNumber / pow10StemSize;
