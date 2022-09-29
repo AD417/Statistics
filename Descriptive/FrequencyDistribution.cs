@@ -43,7 +43,7 @@ class FrequencyDistribution : DataSummary
         }
     }
 
-    public void Summarize()
+    public override void Summarize()
     {
         System.Console.WriteLine("Sample size: {0}", Size);
         System.Console.WriteLine("Total Range: {0} ({1}-{2}).", Range, Min, Max);

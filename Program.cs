@@ -8,8 +8,9 @@ class Program
 
         Population World = Population.ImportFromCSV("example1.csv");
 
-        Leafplot plot = new Leafplot(World);
-        plot.PrintPlot();
+        DataSummary data = new DataSummary(World);
+
+        data.Summarize();
 
         return 0;
     }
