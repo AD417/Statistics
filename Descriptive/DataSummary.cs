@@ -80,9 +80,9 @@ class DataSummary
 
     public virtual void Summarize()
     {
-        System.Console.WriteLine(String.Format("CHECKSUM: Sum is {0}", Sum));
-        System.Console.WriteLine(String.Format("Mean/Average is {0}", Math.Round(Mean, 1)));
-        System.Console.WriteLine(String.Format("Median is {0}", Median));
-        System.Console.WriteLine(String.Format("Mode is {0}", Mode));
+        System.Console.WriteLine($"CHECKSUM: Sum is {Sum}");
+        System.Console.WriteLine($"Mean/Average is {Math.Round(Mean, 1)}");
+        System.Console.WriteLine($"Median is {Median}");
+        System.Console.WriteLine($"Mode is {Mode}");
     }
 }

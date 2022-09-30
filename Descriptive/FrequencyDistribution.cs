@@ -56,9 +56,9 @@ class FrequencyDistribution : DataSummary
 
     public override void Summarize()
     {
-        System.Console.WriteLine("Sample size: {0}", Size);
-        System.Console.WriteLine("Total Range: {0} ({1}-{2}).", Range, Min, Max);
-        System.Console.WriteLine("Class Size: {0}", IntervalWidth);
+        System.Console.WriteLine($"Sample size: {Size}");
+        System.Console.WriteLine($"Total Range: {Range} ({Min}-{Max}).");
+        System.Console.WriteLine($"Class Size: {IntervalWidth}");
     }
     public void PrintChart()
     {
@@ -77,7 +77,7 @@ class FrequencyDistribution : DataSummary
         // While we're here, we may as well String-ify everything for later use. 
         for (int i = 0; i < IntervalCount; i++)
         {
-            dataParts[i, 0] = String.Format("{0}-{1}", Intervals[i,0], Intervals[i,1]);
+            dataParts[i, 0] = String.Format($"{Intervals[i,0]}-{Intervals[i,1]}");
             padding[0] = Math.Max(padding[0], dataParts[i, 0].Length);
 
             dataParts[i, 1] = Midpoint[i].ToString();
