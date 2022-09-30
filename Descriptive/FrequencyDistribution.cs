@@ -4,6 +4,17 @@ namespace Statistics;
     
 class FrequencyDistribution : DataSummary
 {
+    public override double Average 
+    {
+        get {
+            double EstimatedSum = 0;
+            for (int i = 0; i < IntervalCount; i++)
+                EstimatedSum = Midpoint[i] * Frequency[i];
+
+            return EstimatedSum / Size;
+        }
+    }
+
     public int IntervalWidth {get; }
     public int IntervalCount {get; }
     public int[,] Intervals {get; }

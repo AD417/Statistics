@@ -6,9 +6,18 @@ class DataSummary
     public int Sum {get; }
     public int Min {get; }
     public int Max {get; }
-    public double Average {get; }
+    public virtual double Average {get; }
+    public double Mean {get => Average; }
     public double Median {get; }
-    public int Mode {get; }
+    protected int[] _Mode {get; } = new int[0];
+    public int Mode {
+        get {
+            if (_Mode.Length == 0) return -1;
+            return _Mode[0];
+            // TODO: figure out how to deal with a multimodal situation. 
+        } 
+    }
+    public bool MultiModal {get => _Mode.Length > 1; }
     public int Range {get; }
 
     public DataSummary(Set data)
@@ -22,7 +31,7 @@ class DataSummary
         if (data.Members.Count == 0) 
         {
             Median = 0;
-            Mode = 0;
+            _Mode = new int[0];
         } 
         else 
         {
@@ -34,17 +43,45 @@ class DataSummary
             {
                 Median = (double)(data.Members[Size / 2].MagicNumber + data.Members[Size / 2 + 1].MagicNumber) / 2;
             }
-            Mode = data.Members.GroupBy(x => x)
-                .OrderByDescending(x => x.Count()).ThenBy(x => x.Key)
-                .Select(x => (int?)x.Key.MagicNumber)
-                .FirstOrDefault() ?? 0;
+            _Mode = ComputeMode(data);
+            // Mode = data.Members.GroupBy(x => x)
+            //     .OrderByDescending(x => x.Count()).ThenBy(x => x.Key)
+            //     .Select(x => (int?)x.Key.MagicNumber)
+            //     .FirstOrDefault() ?? 0;
         }
+    }
+
+    public static int[] ComputeMode(Set data)
+    {
+        Dictionary<int, int> counts = new Dictionary<int, int>();
+        foreach (Entity ent in data.Members ) {
+            int num = ent.MagicNumber;
+            if (counts.ContainsKey(num))
+                counts[num]++;
+            else
+                counts[num] = 1;
+        }
+
+        int maximum = counts.Max(kvp => kvp.Value);
+        if (maximum < 2) return new int[0];
+
+        List<int> modeList = new List<int>();
+        foreach (int key in counts.Keys) {
+            if (counts[key] == maximum)
+                modeList.Add(key);
+        }
+
+        int[] modes = new int[modeList.Count];
+        for (int i = 0; i < modeList.Count; i++)
+            modes[i] = modeList[i];
+        
+        return modes;
     }
 
     public virtual void Summarize()
     {
         System.Console.WriteLine(String.Format("CHECKSUM: Sum is {0}", Sum));
-        System.Console.WriteLine(String.Format("Mean/Average is {0}", Math.Round(Average, 1)));
+        System.Console.WriteLine(String.Format("Mean/Average is {0}", Math.Round(Mean, 1)));
         System.Console.WriteLine(String.Format("Median is {0}", Median));
         System.Console.WriteLine(String.Format("Mode is {0}", Mode));
     }
