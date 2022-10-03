@@ -15,16 +15,16 @@ class Scatterplot
     {
         string import = File.ReadAllText(filePath);
         string[] importByEntity = import.Split("\n");
-        List<Entity> dataX = new List<Entity>();
-        List<Entity> dataY = new List<Entity>();
+        List<EntityInt> dataX = new List<EntityInt>();
+        List<EntityInt> dataY = new List<EntityInt>();
 
         for (int i = 0; i < importByEntity.Length; i++)
         {
             string line = importByEntity[i];
             string[] values = line.Split(", ");
             if (values.Length < 2) continue;
-            dataX.Add(new Entity(Int32.Parse(values[0])));
-            dataY.Add(new Entity(Int32.Parse(values[1])));
+            dataX.Add(new EntityInt(Int32.Parse(values[0])));
+            dataY.Add(new EntityInt(Int32.Parse(values[1])));
         }
         return new Scatterplot(new Population(dataX), new Population(dataY)); 
     }

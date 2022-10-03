@@ -54,7 +54,7 @@ class DataSummary
     public static int[] ComputeMode(Set data)
     {
         Dictionary<int, int> counts = new Dictionary<int, int>();
-        foreach (Entity ent in data.Members ) {
+        foreach (EntityInt ent in data.Members ) {
             int num = ent.MagicNumber;
             if (counts.ContainsKey(num))
                 counts[num]++;

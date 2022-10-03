@@ -2,7 +2,7 @@ namespace Statistics;
 
 class Set
 {
-    public List<Entity> Members {get; set;} = new List<Entity>();
+    public List<EntityInt> Members {get; set;} = new List<EntityInt>();
 
     public int MemberCount {get => Members.Count();}
     public double MeanMagicNumber { get => Members.Average(ent => ent.MagicNumber);}
@@ -15,15 +15,15 @@ class Set
         if (randomize) 
         {
             for (int i = 0; i < entities; i++)
-                this.Members.Add(new Entity());
+                this.Members.Add(new EntityInt());
         }
         else 
         {
             for (int i = 0; i < entities; i++)
-                this.Members.Add(new Entity(0));
+                this.Members.Add(new EntityInt(0));
         }
     }
-    public Set(List<Entity> entityList)
+    public Set(List<EntityInt> entityList)
     {
         Members = entityList;
     }

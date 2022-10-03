@@ -37,7 +37,7 @@ class Leafplot : DataSummary
         Leaves = new List<List<int>>();
         for (int i = 0; i <= Stems; i++) Leaves.Add(new List<int>());
 
-        foreach (Entity ent in data.Members)
+        foreach (EntityInt ent in data.Members)
         {
             int index = ent.MagicNumber / pow10StemSize - SmallestStem;
             Leaves[index].Add(ent.MagicNumber % pow10StemSize);

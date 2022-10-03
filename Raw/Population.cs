@@ -3,13 +3,13 @@ namespace Statistics;
 class Population : Set
 {
     public Population(int entities) : base(entities) {}
-    public Population(List<Entity> entityList) : base(entityList) {}
+    public Population(List<EntityInt> entityList) : base(entityList) {}
 
     public Sample SampleEntities(int sampleSize) 
     {
         if (sampleSize > MemberCount) throw new ArgumentException("cannot create a sample larger than the population");
         int leftToSample = sampleSize;
-        List<Entity> sampled = new List<Entity>();
+        List<EntityInt> sampled = new List<EntityInt>();
         Random generator = new Random(0);
         for (int i = MemberCount - 1; i >= 0; i--)
         {
@@ -42,7 +42,7 @@ class Population : Set
     {
         string import = File.ReadAllText(filePath);
         string[] importByEntity = import.Split("\n");
-        List<Entity> entities = new List<Entity>();
+        List<EntityInt> entities = new List<EntityInt>();
 
 
         for (int i = 0; i < importByEntity.Length; i++)
@@ -51,7 +51,7 @@ class Population : Set
             if (line.Length == 0) continue;
             string[] values = line.Split(", ");
             if (values.Length < 1) continue;
-            entities.Add(new Entity(Int32.Parse(values[0])));
+            entities.Add(new EntityInt(Int32.Parse(values[0])));
         }
         return new Population(entities);    
     }
