@@ -15,8 +15,8 @@ class Scatterplot
     {
         string import = File.ReadAllText(filePath);
         string[] importByEntity = import.Split("\n");
-        List<EntityInt> dataX = new List<EntityInt>();
-        List<EntityInt> dataY = new List<EntityInt>();
+        List<EntityBase> dataX = new List<EntityBase>();
+        List<EntityBase> dataY = new List<EntityBase>();
 
         for (int i = 0; i < importByEntity.Length; i++)
         {

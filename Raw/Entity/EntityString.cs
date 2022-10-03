@@ -12,10 +12,8 @@ class EntityString : EntityBase, IComparable<EntityString>
     }
 
     // Comparison operators that are useless, but I'm too lazy to remove. 
-    public static bool operator >(EntityString a, EntityString b) => a.MagicNumber > b.MagicNumber;
-    public static bool operator <(EntityString a, EntityString b) => a.MagicNumber < b.MagicNumber;
-    public static bool operator ==(EntityString a, EntityString b) => a.MagicNumber == b.MagicNumber;
-    public static bool operator !=(EntityString a, EntityString b) => a.MagicNumber != b.MagicNumber;
+    public static bool operator ==(EntityString a, EntityString b) => a.MagicValue == b.MagicValue;
+    public static bool operator !=(EntityString a, EntityString b) => a.MagicValue != b.MagicValue;
     public override bool Equals(object? obj)
     {
         // Avoid a NullPtrException.
@@ -27,13 +25,13 @@ class EntityString : EntityBase, IComparable<EntityString>
 
         return Equals((EntityString) obj);
     }
-    public bool Equals(EntityString ent) => this.MagicNumber == ent.MagicNumber;
+    public bool Equals(EntityString ent) => this.MagicValue == ent.MagicValue;
     public override int GetHashCode() => base.GetHashCode();
 
     // Screw it, IComparable. 
     public int CompareTo(EntityString? other) 
     {
-        if (ReferenceEquals(null, other)) return this.MagicNumber;
-        return this.MagicNumber.CompareTo(other.MagicNumber);   
+        if (ReferenceEquals(null, other)) return -1;
+        return this.MagicValue.CompareTo(other.MagicValue);   
     }
 }

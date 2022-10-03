@@ -2,14 +2,13 @@ namespace Statistics;
 
 class Population : Set
 {
-    public Population(int entities) : base(entities) {}
-    public Population(List<EntityInt> entityList) : base(entityList) {}
+    public Population(List<EntityBase> entityList) : base(entityList) {}
 
     public Sample SampleEntities(int sampleSize) 
     {
         if (sampleSize > MemberCount) throw new ArgumentException("cannot create a sample larger than the population");
         int leftToSample = sampleSize;
-        List<EntityInt> sampled = new List<EntityInt>();
+        List<EntityBase> sampled = new List<EntityBase>();
         Random generator = new Random(0);
         for (int i = MemberCount - 1; i >= 0; i--)
         {
@@ -42,14 +41,14 @@ class Population : Set
     {
         string import = File.ReadAllText(filePath);
         string[] importByEntity = import.Split("\n");
-        List<EntityInt> entities = new List<EntityInt>();
+        List<EntityBase> entities = new List<EntityBase>();
 
 
         for (int i = 0; i < importByEntity.Length; i++)
         {
             string line = importByEntity[i];
             if (line.Length == 0) continue;
-            string[] values = line.Split(", ");
+            string[] values = line.Split(", "); 
             if (values.Length < 1) continue;
             entities.Add(new EntityInt(Int32.Parse(values[0])));
         }
