@@ -3,7 +3,8 @@ namespace Statistics;
 class Set
 {
     public List<EntityBase> Members {get; set;} = new List<EntityBase>();
-    public bool IsQualitative {get; }
+    public bool IsQualitative {get => !IsQuantitative; }
+    public bool IsQuantitative {get; }
 
     public int MemberCount {get => Members.Count();}
 
@@ -32,28 +33,21 @@ class Set
         }
     }
 
-    public Set(List<EntityBase> entityList)
+    public Set(List<EntityBase> entityList) 
     {
         Members = entityList;
-        IsQualitative = !entityList[0].IsNumeric;
+        IsQuantitative = entityList[0].IsNumeric;
     }
 
     public List<int> AllMagicNumbers()
     {
-        List<int> output = new List<int>();
-        foreach (EntityBase ent in Members)
-        {
-            output.Add(ent.MagicNumber);
-        }
-        return output;
+        if (IsQualitative) throw new TypeAccessException("Data set is qualitative, and has no numbers");
+        return Members.Select(ent => ent.MagicNumber).ToList();
     }
     public List<string> AllMagicValues()
     {
-        List<string> output = new List<string>();
-        foreach (EntityBase ent in Members)
-        {
-            output.Add(ent.MagicValue);
-        }
-        return output;
+        // NOTE: should I return a list of all the numbers, stringified, anyways? 
+        if (IsQuantitative) throw new TypeAccessException("Data set is quantitative, and has no strings");
+        return Members.Select(ent => ent.MagicValue).ToList();
     }
 }

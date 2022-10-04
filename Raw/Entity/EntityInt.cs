@@ -3,14 +3,12 @@ namespace Statistics;
 class EntityInt : EntityBase, IComparable<EntityInt>
 {
     public override int MagicNumber {get; }
-
     public override bool IsNumeric {get; } = true;
     public override string MagicValue => throw new NotImplementedException();
     private static Random Generator {get;} = new Random(1);
 
     public EntityInt() : this(Generator.Next(1, 100)) {}
-    public EntityInt(int MagicNumber) : this(MagicNumber, Generator.Next(1, 100)) {}
-    public EntityInt(int MagicNumber, int MagicSecondNumber)
+    public EntityInt(int MagicNumber)
     {
         this.MagicNumber = MagicNumber;
     }

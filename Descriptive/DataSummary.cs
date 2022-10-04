@@ -36,15 +36,11 @@ class DataSummary
         else 
         {
             if (Size % 2 == 1) 
-            {
                 Median = data.Members[(Size + 1) / 2].MagicNumber;
-            }
             else 
-            {
                 Median = (double)(data.Members[Size / 2].MagicNumber + data.Members[Size / 2 + 1].MagicNumber) / 2;
-            }
             _Mode = ComputeMode(data);
-            // Mode = data.Members.GroupBy(x => x)
+            // mode = data.Members.GroupBy(x => x)
             //     .OrderByDescending(x => x.Count()).ThenBy(x => x.Key)
             //     .Select(x => (int?)x.Key.MagicNumber)
             //     .FirstOrDefault() ?? 0;
@@ -54,12 +50,12 @@ class DataSummary
     public static int[] ComputeMode(Set data)
     {
         Dictionary<int, int> counts = new Dictionary<int, int>();
-        foreach (EntityInt ent in data.Members ) {
-            int num = ent.MagicNumber;
-            if (counts.ContainsKey(num))
-                counts[num]++;
+        foreach (EntityInt ent in data.Members ) 
+        {
+            if (counts.ContainsKey(ent.MagicNumber))
+                counts[ent.MagicNumber]++;
             else
-                counts[num] = 1;
+                counts[ent.MagicNumber] = 1;
         }
 
         int maximum = counts.Max(kvp => kvp.Value);
