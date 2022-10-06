@@ -18,6 +18,8 @@ class DataSummary
         } 
     }
     public bool MultiModal {get => _Mode.Length > 1; }
+    public double StandardDeviation {get; }
+    public double Stdev {get => StandardDeviation; }
     public int Range {get; }
 
     public DataSummary(Set data)
@@ -28,6 +30,7 @@ class DataSummary
         Range = Max - Min;
         Average = data.MeanMagicNumber;
         Sum = (int)(Average * Size);
+        StandardDeviation = ComputeStandardDeviation(data);
         if (data.Members.Count == 0) 
         {
             Median = 0;
@@ -37,7 +40,7 @@ class DataSummary
         {
             if (Size % 2 == 1) 
             {
-                Median = data.Members[(Size + 1) / 2].MagicNumber;
+                Median = data.Members[(Size - 1) / 2].MagicNumber;
             }
             else 
             {
@@ -78,11 +81,22 @@ class DataSummary
         return modes;
     }
 
+    public static double ComputeStandardDeviation(Set data)
+    {
+        // Store MeanMagicNumber so it's not constantly recalculated.
+        double dataMean = data.MeanMagicNumber; 
+        System.Console.WriteLine(dataMean);
+        return Math.Sqrt(data.Members.Sum(x => Math.Pow(x.MagicNumber - dataMean, 2)) / data.MemberCount);
+    }
+
     public virtual void Summarize()
     {
+        System.Console.WriteLine($"Data set contains {Size} elements.");
         System.Console.WriteLine($"CHECKSUM: Sum is {Sum}");
+        System.Console.WriteLine($"Range is {Range} ({Max}-{Min})");
         System.Console.WriteLine($"Mean/Average is {Math.Round(Mean, 1)}");
         System.Console.WriteLine($"Median is {Median}");
         System.Console.WriteLine($"Mode is {Mode}");
+        System.Console.WriteLine($"Standard Deviation is {Stdev}");
     }
 }
