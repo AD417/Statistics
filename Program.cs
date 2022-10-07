@@ -4,7 +4,9 @@ class Program
 {
     public static int Main()
     {
-        Test1.run();
+        Sample OurClass = Sample.ImportFromCSV("example1.csv");
+
+        new DataSummary(OurClass).Summarize();
 
         return 0;
     }

@@ -1,6 +1,6 @@
 namespace Statistics;
 
-class Set
+abstract class Set
 {
     public List<Entity> Members {get; set;} = new List<Entity>();
 
@@ -8,6 +8,8 @@ class Set
     public double MeanMagicNumber { get => Members.Average(ent => ent.MagicNumber);}
     public int MinMagicNumber { get => Members.Min(ent => ent.MagicNumber);}
     public int MaxMagicNumber { get => Members.Max(ent => ent.MagicNumber);}
+
+    public abstract bool IsPopulation {get;}
 
     public Set(int entities) : this(entities, true) {}
     public Set(int entities, bool randomize)

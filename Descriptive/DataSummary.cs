@@ -20,6 +20,7 @@ class DataSummary
     public bool MultiModal {get => _Mode.Length > 1; }
     public double StandardDeviation {get; }
     public double Stdev {get => StandardDeviation; }
+    public double Variance {get => StandardDeviation * StandardDeviation; }
     public int Range {get; }
 
     public DataSummary(Set data)
@@ -85,8 +86,9 @@ class DataSummary
     {
         // Store MeanMagicNumber so it's not constantly recalculated.
         double dataMean = data.MeanMagicNumber; 
-        System.Console.WriteLine(dataMean);
-        return Math.Sqrt(data.Members.Sum(x => Math.Pow(x.MagicNumber - dataMean, 2)) / data.MemberCount);
+        int VarianceDivisor = data.MemberCount;
+        if (!data.IsPopulation) VarianceDivisor--;
+        return Math.Sqrt(data.Members.Sum(x => Math.Pow(x.MagicNumber - dataMean, 2)) / VarianceDivisor);
     }
 
     public virtual void Summarize()
@@ -97,6 +99,7 @@ class DataSummary
         System.Console.WriteLine($"Mean/Average is {Math.Round(Mean, 1)}");
         System.Console.WriteLine($"Median is {Median}");
         System.Console.WriteLine($"Mode is {Mode}");
-        System.Console.WriteLine($"Standard Deviation is {Stdev}");
+        System.Console.WriteLine($"Standard Deviation is {Math.Round(Stdev, 4)}");
+        System.Console.WriteLine($"Variance is {Math.Round(Variance, 4)}");
     }
 }

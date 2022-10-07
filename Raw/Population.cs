@@ -2,6 +2,7 @@ namespace Statistics;
 
 class Population : Set
 {
+    public override bool IsPopulation {get => true; }
     public Population(int entities) : base(entities) {}
     public Population(List<Entity> entityList) : base(entityList) {}
 
@@ -38,6 +39,7 @@ class Population : Set
         
         File.WriteAllText(filePath, export);
     }
+    // Do it once, it's fine. 
     public static Population ImportFromCSV(string filePath)
     {
         string import = File.ReadAllText(filePath);
