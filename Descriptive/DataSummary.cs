@@ -4,11 +4,21 @@ class DataSummary
 {
     public int Size {get; }
     public int Sum {get; }
-    public int Min {get; }
-    public int Max {get; }
+
+    private double[] _criticalPositions = new double[5];
+    public double Min {get => _criticalPositions[0]; }
+    public double Q1 {get => _criticalPositions[1]; }
+    public double Q2 {get => _criticalPositions[2]; }
+    public double Median {get => _criticalPositions[2]; }
+    public double Q3 {get => _criticalPositions[3]; }
+    public double Max {get => _criticalPositions[4]; }
+
+    public double Range {get => Max - Min; }
+    public double InterquartileRange {get => Q3 - Q1; }
+    public double IQR {get => InterquartileRange; }
+
     public virtual double Average {get; }
     public double Mean {get => Average; }
-    public double Median {get; }
     protected int[] _Mode {get; } = new int[0];
     public int Mode {
         get {
@@ -18,41 +28,62 @@ class DataSummary
         } 
     }
     public bool MultiModal {get => _Mode.Length > 1; }
-    public double StandardDeviation {get; }
+    public virtual double StandardDeviation {get; }
     public double Stdev {get => StandardDeviation; }
     public double Variance {get => StandardDeviation * StandardDeviation; }
-    public int Range {get; }
 
     public DataSummary(Set data)
     {
+        if (data.MemberCount == 0) throw new ArgumentException("Cannot summarize a data set with 0 elements");
         Size = data.MemberCount;
-        Min = data.MinMagicNumber;
-        Max = data.MaxMagicNumber;
-        Range = Max - Min;
         Average = data.MeanMagicNumber;
         Sum = (int)(Average * Size);
         StandardDeviation = ComputeStandardDeviation(data);
-        if (data.Members.Count == 0) 
+
+        Set[] subsets = new Set[2];
+        _criticalPositions = new double[5];
+
+        if (Size % 2 == 1) 
         {
-            Median = 0;
-            _Mode = new int[0];
-        } 
+            _criticalPositions[2] = data.Members[(Size - 1) / 2].MagicNumber;
+            subsets[0] = new Sample(data.Members.GetRange(0, Size / 2));
+            subsets[1] = new Sample(data.Members.GetRange(Size / 2 + 1,Size / 2));
+        }
         else 
         {
-            if (Size % 2 == 1) 
-            {
-                Median = data.Members[(Size - 1) / 2].MagicNumber;
-            }
-            else 
-            {
-                Median = (double)(data.Members[Size / 2].MagicNumber + data.Members[Size / 2 + 1].MagicNumber) / 2;
-            }
-            _Mode = ComputeMode(data);
-            // Mode = data.Members.GroupBy(x => x)
-            //     .OrderByDescending(x => x.Count()).ThenBy(x => x.Key)
-            //     .Select(x => (int?)x.Key.MagicNumber)
-            //     .FirstOrDefault() ?? 0;
+            _criticalPositions[2] = 0.5 * (double)(
+                data.Members[Size / 2 - 1].MagicNumber + 
+                data.Members[Size / 2].MagicNumber
+            );
+            subsets[0] = new Sample(data.Members.GetRange(0, Size / 2));
+            subsets[1] = new Sample(data.Members.GetRange(Size / 2, Size / 2));
         }
+
+        int subsetSize = subsets[0].MemberCount;
+        if (subsetSize % 2 == 1)
+        {
+            _criticalPositions[1] = subsets[0].Members[(subsetSize - 1) / 2].MagicNumber;
+            _criticalPositions[3] = subsets[1].Members[(subsetSize - 1) / 2].MagicNumber;
+        }
+        else 
+        {
+            _criticalPositions[1] = 0.5 * (double)(
+                subsets[0].Members[subsetSize / 2 - 1].MagicNumber + 
+                subsets[0].Members[subsetSize / 2].MagicNumber
+            );
+            _criticalPositions[3] = 0.5 * (double)(
+                subsets[1].Members[subsetSize / 2 - 1].MagicNumber + 
+                subsets[1].Members[subsetSize / 2].MagicNumber
+            );
+        }
+        _criticalPositions[0] = data.MinMagicNumber;
+        _criticalPositions[4] = data.MaxMagicNumber;
+
+        _Mode = ComputeMode(data);
+        // Mode = data.Members.GroupBy(x => x)
+        //     .OrderByDescending(x => x.Count()).ThenBy(x => x.Key)
+        //     .Select(x => (int?)x.Key.MagicNumber)
+        //     .FirstOrDefault() ?? 0;
     }
 
     public static int[] ComputeMode(Set data)
@@ -93,13 +124,18 @@ class DataSummary
 
     public virtual void Summarize()
     {
-        System.Console.WriteLine($"Data set contains {Size} elements.");
-        System.Console.WriteLine($"CHECKSUM: Sum is {Sum}");
-        System.Console.WriteLine($"Range is {Range} ({Max}-{Min})");
-        System.Console.WriteLine($"Mean/Average is {Math.Round(Mean, 1)}");
-        System.Console.WriteLine($"Median is {Median}");
-        System.Console.WriteLine($"Mode is {Mode}");
-        System.Console.WriteLine($"Standard Deviation is {Math.Round(Stdev, 4)}");
-        System.Console.WriteLine($"Variance is {Math.Round(Variance, 4)}");
+        System.Console.WriteLine($"Count:   {Size}");
+        System.Console.WriteLine($"Sum:     {Sum}");
+        System.Console.WriteLine($"Mean:    {Math.Round(Mean, 2)}");
+        System.Console.WriteLine($"Mode:    {Mode}");
+        System.Console.WriteLine($"Min:     {Min}");
+        System.Console.WriteLine($"Q1:      {Q1}");
+        System.Console.WriteLine($"Median:  {Median}");
+        System.Console.WriteLine($"Q3:      {Q3}");
+        System.Console.WriteLine($"Max:     {Max}");
+        System.Console.WriteLine($"Range:   {Range} ({Max}-{Min})");
+        System.Console.WriteLine($"IQR:     {IQR} ({Q3}-{Q1})");
+        System.Console.WriteLine($"Stdev:   {Math.Round(Stdev, 4)}");
+        System.Console.WriteLine($"Stdev^2: {Math.Round(Variance, 4)}");
     }
 }

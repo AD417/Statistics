@@ -14,6 +14,18 @@ class FrequencyDistribution : DataSummary
             return EstimatedSum / Size;
         }
     }
+    public override double StandardDeviation 
+    {
+        get {
+            double EstimatedVariance = 0;
+            for (int i = 0; i < IntervalCount; i++)
+                EstimatedVariance += Math.Pow(Midpoint[i] - Average, 2) * Frequency[i];
+            
+            EstimatedVariance /= IntervalCount;
+
+            return Math.Sqrt(EstimatedVariance);
+        }
+    }
 
     public int IntervalWidth {get; }
     public int IntervalCount {get; }
@@ -32,8 +44,8 @@ class FrequencyDistribution : DataSummary
         Midpoint = new double[IntervalCount];
         for (int i = 0; i < IntervalCount; i++)
         {
-            Intervals[i, 0] = Min + IntervalWidth * i;
-            Intervals[i, 1] = Min + IntervalWidth * i + IntervalWidth - 1;
+            Intervals[i, 0] = (int) Min + IntervalWidth * i;
+            Intervals[i, 1] = (int) Min + IntervalWidth * i + IntervalWidth - 1;
             Midpoint[i] = (double)(Intervals[i, 0] + Intervals[i, 1]) / 2;
         }
 
@@ -41,7 +53,7 @@ class FrequencyDistribution : DataSummary
         CumulativeFrequency = new int[IntervalCount];
         for (int i = 0; i < data.MemberCount; i++) 
         {
-            int firstIndex = (data.Members[i].MagicNumber - Min) / IntervalWidth;
+            int firstIndex = (data.Members[i].MagicNumber - (int)Min) / IntervalWidth;
             Frequency[firstIndex]++;
             for (int j = firstIndex; j < IntervalCount; j++)
                 CumulativeFrequency[j]++;

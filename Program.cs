@@ -4,9 +4,9 @@ class Program
 {
     public static int Main()
     {
-        Sample OurClass = Sample.ImportFromCSV("example1.csv");
+        Population data = Population.ImportFromCSV("example1.csv");
 
-        new DataSummary(OurClass).Summarize();
+        new DataSummary(data).Summarize();
 
         return 0;
     }

@@ -28,6 +28,7 @@ abstract class Set
     public Set(List<Entity> entityList)
     {
         Members = entityList;
+        Members.Sort();
     }
 
     public List<int> AllMagicNumbers()

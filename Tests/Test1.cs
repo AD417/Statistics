@@ -12,7 +12,7 @@ class Test1
         DataSummary data = new DataSummary(World);  
 
         AssertEqual<int>(data.Sum, 45,"FAILED: Sum of elements came out as {0}, expected {1}");
-        AssertEqual<int>(data.Range, 8,"FAILED: Range of elements came out as {0}, expected {1}");
+        AssertEqual<double>(data.Range, 8,"FAILED: Range of elements came out as {0}, expected {1}");
         AssertEqual<double>(data.Mean, 5d,"FAILED: Average of elements came out as {0}, expected {1}");
         AssertEqual<int>(data.Sum, 45,"FAILED: Sum of elements came out as {0}, expected {1}");
         AssertEqual<int>(data.Sum, 45,"FAILED: Sum of elements came out as {0}, expected {1}");
