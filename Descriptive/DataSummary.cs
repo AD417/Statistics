@@ -43,39 +43,7 @@ class DataSummary
         Set[] subsets = new Set[2];
         _criticalPositions = new double[5];
 
-        if (Size % 2 == 1) 
-        {
-            _criticalPositions[2] = data.Members[(Size - 1) / 2].MagicNumber;
-            subsets[0] = new Sample(data.Members.GetRange(0, Size / 2));
-            subsets[1] = new Sample(data.Members.GetRange(Size / 2 + 1,Size / 2));
-        }
-        else 
-        {
-            _criticalPositions[2] = 0.5 * (double)(
-                data.Members[Size / 2 - 1].MagicNumber + 
-                data.Members[Size / 2].MagicNumber
-            );
-            subsets[0] = new Sample(data.Members.GetRange(0, Size / 2));
-            subsets[1] = new Sample(data.Members.GetRange(Size / 2, Size / 2));
-        }
-
-        int subsetSize = subsets[0].MemberCount;
-        if (subsetSize % 2 == 1)
-        {
-            _criticalPositions[1] = subsets[0].Members[(subsetSize - 1) / 2].MagicNumber;
-            _criticalPositions[3] = subsets[1].Members[(subsetSize - 1) / 2].MagicNumber;
-        }
-        else 
-        {
-            _criticalPositions[1] = 0.5 * (double)(
-                subsets[0].Members[subsetSize / 2 - 1].MagicNumber + 
-                subsets[0].Members[subsetSize / 2].MagicNumber
-            );
-            _criticalPositions[3] = 0.5 * (double)(
-                subsets[1].Members[subsetSize / 2 - 1].MagicNumber + 
-                subsets[1].Members[subsetSize / 2].MagicNumber
-            );
-        }
+        (_criticalPositions[1], _criticalPositions[2], _criticalPositions[3]) = computeQuartiles(data);
         _criticalPositions[0] = data.MinMagicNumber;
         _criticalPositions[4] = data.MaxMagicNumber;
 
@@ -113,6 +81,49 @@ class DataSummary
         return modes;
     }
 
+    public static (double q1, double q2, double q3) computeQuartiles(Set data)
+    {
+        Set[] subsets = new Set[2];
+        double q1, q2, q3;
+        int size = data.MemberCount;
+
+
+        if (size % 2 == 1) 
+        {
+            q2 = data.Members[(size - 1) / 2].MagicNumber;
+            subsets[0] = new Sample(data.Members.GetRange(0, size / 2));
+            subsets[1] = new Sample(data.Members.GetRange(size / 2 + 1,size / 2));
+        }
+        else 
+        {
+            q2 = 0.5 * (double)(
+                data.Members[size / 2 - 1].MagicNumber + 
+                data.Members[size / 2].MagicNumber
+            );
+            subsets[0] = new Sample(data.Members.GetRange(0, size / 2));
+            subsets[1] = new Sample(data.Members.GetRange(size / 2, size / 2));
+        }
+
+        int subsetSize = subsets[0].MemberCount;
+        if (subsetSize % 2 == 1)
+        {
+            q1 = subsets[0].Members[(subsetSize - 1) / 2].MagicNumber;
+            q3 = subsets[1].Members[(subsetSize - 1) / 2].MagicNumber;
+        }
+        else 
+        {
+            q1 = 0.5 * (double)(
+                subsets[0].Members[subsetSize / 2 - 1].MagicNumber + 
+                subsets[0].Members[subsetSize / 2].MagicNumber
+            );
+            q3 = 0.5 * (double)(
+                subsets[1].Members[subsetSize / 2 - 1].MagicNumber + 
+                subsets[1].Members[subsetSize / 2].MagicNumber
+            );
+        }
+        return (q1, q2, q3);
+    }
+
     public static double ComputeStandardDeviation(Set data)
     {
         // Store MeanMagicNumber so it's not constantly recalculated.
@@ -135,7 +146,7 @@ class DataSummary
         System.Console.WriteLine($"Max:     {Max}");
         System.Console.WriteLine($"Range:   {Range} ({Max}-{Min})");
         System.Console.WriteLine($"IQR:     {IQR} ({Q3}-{Q1})");
-        System.Console.WriteLine($"Stdev:   {Math.Round(Stdev, 4)}");
-        System.Console.WriteLine($"Stdev^2: {Math.Round(Variance, 4)}");
+        System.Console.WriteLine($"Stdev:   {Math.Round(Stdev, 8)}");
+        System.Console.WriteLine($"Stdev^2: {Math.Round(Variance, 8)}");
     }
 }

@@ -40,4 +40,8 @@ abstract class Set
         }
         return output;
     }
+    public string MagicNumbersAsPrintable()
+    {
+        return String.Join(",", AllMagicNumbers());
+    }
 }
