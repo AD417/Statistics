@@ -144,8 +144,8 @@ class DataSummary
         System.Console.WriteLine($"Median:  {Median}");
         System.Console.WriteLine($"Q3:      {Q3}");
         System.Console.WriteLine($"Max:     {Max}");
-        System.Console.WriteLine($"Range:   {Range} ({Max}-{Min})");
-        System.Console.WriteLine($"IQR:     {IQR} ({Q3}-{Q1})");
+        System.Console.WriteLine($"Range:   {Range} ({Max} - {Min})");
+        System.Console.WriteLine($"IQR:     {IQR} ({Q3} - {Q1})");
         System.Console.WriteLine($"Stdev:   {Math.Round(Stdev, 8)}");
         System.Console.WriteLine($"Stdev^2: {Math.Round(Variance, 8)}");
     }

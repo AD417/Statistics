@@ -4,9 +4,10 @@ class Program
 {
     public static int Main()
     {
-        Sample data = Sample.ImportFromCSV("example1.csv");
+        int[] weights = {1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1};
+        Sample data = ExperimentalProbability.WeightedOutcomeTrial(weights, 10000);
 
-        System.Console.WriteLine(data.MagicNumbersAsPrintable());
+        // System.Console.WriteLine(data.MagicNumbersAsPrintable());
 
         new DataSummary(data).Summarize();
 

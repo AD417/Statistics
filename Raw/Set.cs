@@ -10,9 +10,7 @@ abstract class Set
     public int MaxMagicNumber { get => Members.Max(ent => ent.MagicNumber);}
 
     public abstract bool IsPopulation {get;}
-
-    public Set(int entities) : this(entities, true) {}
-    public Set(int entities, bool randomize)
+    public Set(int entities, bool randomize = false)
     {
         if (randomize) 
         {
