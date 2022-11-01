@@ -4,15 +4,24 @@ class Program
 {
     public static int Main()
     {
-        int[] weights = {1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1};
-        Sample data = ExperimentalProbability.WeightedOutcomeTrial(weights, 10000);
+        string output = "\"C r\nn\", ";
+        for (int i = 1; i <= 30; i++) 
+            output += i.ToString() + ", ";
+        output += "\n";
 
-        // System.Console.WriteLine(data.MagicNumbersAsPrintable());
+        for (int n = 1; n <= 30; n++)
+        {
+            string line = n.ToString() + ", ";
+            int r;
+            for (r = 1; r <= n; r++)
+            {
+                line += Math.Round(Permutation.nPr(n, r)).ToString() + ", ";
+            }
+            for (; r <= 30; r++) line += ",";
+            output += line + "\n";
+        }
 
-        new DataSummary(data).Summarize();
-
-        // FrequencyDistribution fd = new FrequencyDistribution(data, 7);
-        // fd.DisplayCumulativeFrequencyLineGraph();
+        File.WriteAllText("nprCombinations.csv", output);
 
         return 0;
     }
