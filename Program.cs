@@ -4,24 +4,53 @@ class Program
 {
     public static int Main()
     {
-        string output = "\"C r\nn\", ";
-        for (int i = 1; i <= 30; i++) 
-            output += i.ToString() + ", ";
-        output += "\n";
+        ProbabilityDistribution pd = BinomialDistribution.AllOutcomesChance(9, 0.6);
+        System.Console.WriteLine(pd.Exactly(5));
+        System.Console.WriteLine(pd.AtLeast(6));
+        System.Console.WriteLine(pd.LessThan(4));
+        System.Console.WriteLine(); // Line break
 
-        for (int n = 1; n <= 30; n++)
-        {
-            string line = n.ToString() + ", ";
-            int r;
-            for (r = 1; r <= n; r++)
-            {
-                line += Math.Round(Permutation.nPr(n, r)).ToString() + ", ";
-            }
-            for (; r <= 30; r++) line += ",";
-            output += line + "\n";
-        }
+        pd = BinomialDistribution.AllOutcomesChance(6, 0.39);
+        System.Console.WriteLine(pd.Exactly(2));
+        System.Console.WriteLine(pd.AtLeast(4));
+        System.Console.WriteLine(pd.LessThan(3));
+        System.Console.WriteLine();
 
-        File.WriteAllText("nprCombinations.csv", output);
+        pd = BinomialDistribution.AllOutcomesChance(12, 0.27);
+        System.Console.WriteLine(pd.Exactly(3));
+        System.Console.WriteLine(pd.AtLeast(4));
+        System.Console.WriteLine(pd.LessThan(8));
+        System.Console.WriteLine();
+
+        pd = BinomialDistribution.AllOutcomesChance(10, 0.63);
+        System.Console.WriteLine(pd.Exactly(6));
+        System.Console.WriteLine(pd.AtLeast(5));
+        System.Console.WriteLine(pd.LessThan(8));
+        System.Console.WriteLine();
+
+        pd = BinomialDistribution.AllOutcomesChance(8, 0.56);
+        System.Console.WriteLine(pd.Exactly(5));
+        System.Console.WriteLine(pd.MoreThan(5));
+        System.Console.WriteLine(pd.AtMost(5));
+        System.Console.WriteLine();
+
+        pd = BinomialDistribution.AllOutcomesChance(20, 0.68);
+        System.Console.WriteLine(pd.Exactly(1));
+        System.Console.WriteLine(pd.MoreThan(1));
+        System.Console.WriteLine(pd.AtMost(1));
+        System.Console.WriteLine();
+
+        pd = BinomialDistribution.AllOutcomesChance(10, 0.51);
+        System.Console.WriteLine(pd.Exactly(2));
+        System.Console.WriteLine(pd.MoreThan(2));
+        System.Console.WriteLine(pd.ProbabilityBetween(2,5));
+        System.Console.WriteLine();
+        
+        pd = BinomialDistribution.AllOutcomesChance(12, 0.43);
+        System.Console.WriteLine(pd.Exactly(4));
+        System.Console.WriteLine(pd.MoreThan(4));
+        System.Console.WriteLine(pd.ProbabilityBetween(4,8));
+        System.Console.WriteLine();
 
         return 0;
     }

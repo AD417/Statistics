@@ -218,6 +218,24 @@ class FrequencyDistribution : DataSummary
             .Show();
     }
 
+    // public FrequencyDistribution ImportFromCSV(string filePath)
+    // {
+    //     string import = File.ReadAllText(filePath);
+    //     string[] importByEntity = import.Split("\n");
+    //     List<int> events = new List<int>();
+    //     List<double> outcome = new List<double>();
+    // 
+    //     for (int i = 0; i < importByEntity.Length; i++)
+    //     {
+    //         string line = importByEntity[i];
+    //         if (line.Length == 0) continue;
+    //         string[] values = line.Split(", ");
+    //         if (values.Length < 1) continue;
+    //         entities.Add(new Entity(Int32.Parse(values[0])));
+    //     }
+    //     return new Population(entities);    
+    // }
+
     public void ExportToCSV(string filePath) 
     {
         string export = "Class #, Bounds, Midpoint, Frequency, R.F., C.F.\n";
