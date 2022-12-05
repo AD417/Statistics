@@ -1,3 +1,5 @@
+using Plotly.NET.CSharp;
+
 namespace Statistics;
 
 class ProbabilityDistribution 
@@ -16,6 +18,7 @@ class ProbabilityDistribution
     {
         if (outcomes.Length != probability.Length) 
             throw new Exception("Dimension Mismatch: invalid probability distribution constructor.");
+        Intervals = outcomes;
     }
 
     public ProbabilityDistribution(double[] probability)
@@ -77,6 +80,24 @@ class ProbabilityDistribution
         return 0.0;
     }
 
+
+    public void DisplayHistogram()
+    {
+        // I am actually cheating a LOT with this "Histogram" -- it's actually a bar graph. 
+        Chart.Column<double, int, string>(
+            // Casting shenanigans because Frequency is stored as an int. 
+            Probability.ToArray(),
+            // The "center" of the histogram bars. On paper, it's a bad idea because you can make mistakes this way,
+            // but the thing's a computer, and won't screw up unless we give it bad data. 
+            Keys: Intervals,
+            // The lynchpin: by setting the width to the width of an interval, we leave no gaps between the bars. 
+            // Maybe there is a gap, but that can be chalked up to styling. 
+            Width: Intervals[1] - Intervals[0]
+        )
+            .WithXAxisStyle<double, int, string>(Title: Plotly.NET.Title.init("x"))
+            .WithYAxisStyle<double, int, string>(Title: Plotly.NET.Title.init("P(x)"))
+            .Show();
+    }
 
     public static ProbabilityDistribution ImportFromCSV(string filePath)
     {

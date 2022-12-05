@@ -4,21 +4,22 @@ class Program
 {
     public static int Main()
     {
-        ZScore.Between(0, 1.96);
-        ZScore.Between(0, 0.67);
-        ZScore.Between(-1.23, 0);
-        ZScore.Between(-1.43, 0);
-        ZScore.RightOf(0.82);
-        ZScore.RightOf(2.83);
-        ZScore.LeftOf(-1.77);
-        ZScore.LeftOf(-1.32);
-        ZScore.Between(-0.2, 1.56);
-        ZScore.Between(-2.46, 1.74);
-        ZScore.Between(1.12, 1.43);
-        ZScore.Between(1.46, 2.97);
-        ZScore.RightOf(-1.43);
-        ZScore.LeftOf(1.42);
+        System.Console.Write(" 1) "); ZScore.LeftOf(2);
+        System.Console.Write(" 2) "); ZScore.Between(-0.13, 1.75);
+        System.Console.Write(" 3) "); ZScore.RightOf(1.86);
+        
 
+        NormalDistribution nd = new NormalDistribution(70, 3, true);
+
+        System.Console.Write(" 4) "); nd.ZScoreFor(83);
+        System.Console.Write(" 5) "); nd.MoreThan(83);
+
+        nd = new NormalDistribution(150, 10, true);
+
+        System.Console.Write(" 6) "); nd.LessThan(130);
+        System.Console.Write(" 7) "); nd.MoreThan(125);
+        System.Console.Write(" 8) "); nd.Between(125, 155);
+        System.Console.Write(" 9) "); nd.TopPercent(2);
         return 0;
     }
 }
