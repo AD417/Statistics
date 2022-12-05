@@ -53,7 +53,7 @@ class FrequencyDistribution : DataSummary
         CumulativeFrequency = new int[IntervalCount];
         for (int i = 0; i < data.MemberCount; i++) 
         {
-            int firstIndex = (data.Members[i].MagicNumber - (int)Min) / IntervalWidth;
+            int firstIndex = (int) (data.Members[i].MagicNumber - Min) / IntervalWidth;
             Frequency[firstIndex]++;
             for (int j = firstIndex; j < IntervalCount; j++)
                 CumulativeFrequency[j]++;

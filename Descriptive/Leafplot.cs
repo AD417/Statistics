@@ -31,7 +31,7 @@ class Leafplot : DataSummary
         StemSize = (int) Math.Max((Math.Log10(data.MaxMagicNumber - data.MinMagicNumber) - 0.2), (Math.Log10(data.MaxMagicNumber) - 0.2));
         int pow10StemSize = (int) Math.Pow(10, StemSize);
 
-        SmallestStem = data.MinMagicNumber / pow10StemSize;
+        SmallestStem = (int) data.MinMagicNumber / pow10StemSize;
         Stems = (int)Math.Ceiling((float)data.MaxMagicNumber / pow10StemSize) - SmallestStem;
 
         Leaves = new List<List<int>>();
@@ -39,8 +39,9 @@ class Leafplot : DataSummary
 
         foreach (Entity ent in data.Members)
         {
-            int index = ent.MagicNumber / pow10StemSize - SmallestStem;
-            Leaves[index].Add(ent.MagicNumber % pow10StemSize);
+            // Same patchwork as in DotPlot. Assume the Magic is always an int. 
+            int index = (int) (ent.MagicNumber / pow10StemSize - SmallestStem);
+            Leaves[index].Add((int) ent.MagicNumber % pow10StemSize);
         }
         foreach (List<int> leaves in Leaves) leaves.Sort();
     }

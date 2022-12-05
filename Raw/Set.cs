@@ -6,8 +6,8 @@ abstract class Set
 
     public int MemberCount {get => Members.Count();}
     public double MeanMagicNumber { get => Members.Average(ent => ent.MagicNumber);}
-    public int MinMagicNumber { get => Members.Min(ent => ent.MagicNumber);}
-    public int MaxMagicNumber { get => Members.Max(ent => ent.MagicNumber);}
+    public double MinMagicNumber { get => Members.Min(ent => ent.MagicNumber);}
+    public double MaxMagicNumber { get => Members.Max(ent => ent.MagicNumber);}
 
     public abstract bool IsPopulation {get;}
     public Set(int entities, bool randomize = false)
@@ -29,9 +29,9 @@ abstract class Set
         Members.Sort();
     }
 
-    public List<int> AllMagicNumbers()
+    public List<double> AllMagicNumbers()
     {
-        List<int> output = new List<int>();
+        List<double> output = new List<double>();
         for (int entity = 0; entity < Members.Count; entity++)
         {
             output.Add(Members[entity].MagicNumber);

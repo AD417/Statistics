@@ -19,8 +19,8 @@ class DataSummary
 
     public virtual double Average {get; }
     public double Mean {get => Average; }
-    protected int[] _Mode {get; } = new int[0];
-    public int Mode {
+    protected double[] _Mode {get; } = new double[0];
+    public double Mode {
         get {
             if (_Mode.Length == 0) return -1;
             return _Mode[0];
@@ -54,11 +54,11 @@ class DataSummary
         //     .FirstOrDefault() ?? 0;
     }
 
-    public static int[] ComputeMode(Set data)
+    public static double[] ComputeMode(Set data)
     {
-        Dictionary<int, int> counts = new Dictionary<int, int>();
+        Dictionary<double, int> counts = new Dictionary<double, int>();
         foreach (Entity ent in data.Members ) {
-            int num = ent.MagicNumber;
+            double num = ent.MagicNumber;
             if (counts.ContainsKey(num))
                 counts[num]++;
             else
@@ -66,15 +66,15 @@ class DataSummary
         }
 
         int maximum = counts.Max(kvp => kvp.Value);
-        if (maximum < 2) return new int[0];
+        if (maximum < 2) return new double[0];
 
-        List<int> modeList = new List<int>();
+        List<double> modeList = new List<double>();
         foreach (int key in counts.Keys) {
             if (counts[key] == maximum)
                 modeList.Add(key);
         }
 
-        int[] modes = new int[modeList.Count];
+        double[] modes = new double[modeList.Count];
         for (int i = 0; i < modeList.Count; i++)
             modes[i] = modeList[i];
         

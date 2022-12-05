@@ -30,16 +30,18 @@ class Dotplot : DataSummary
         StemSize = StemSize;
         int pow10StemSize = (int) Math.Pow(10, StemSize);
     
-        SmallestStem = data.MinMagicNumber / pow10StemSize;
-        Stems = (int)Math.Ceiling((float)data.MaxMagicNumber / pow10StemSize) - SmallestStem;
+        SmallestStem = (int) data.MinMagicNumber / pow10StemSize;
+        Stems = (int) Math.Ceiling(data.MaxMagicNumber / pow10StemSize) - SmallestStem;
     
         Leaves = new List<List<int>>();
         for (int i = 0; i <= Stems; i++) Leaves.Add(new List<int>());
     
         foreach (Entity ent in data.Members)
         {
-            int index = ent.MagicNumber / pow10StemSize - SmallestStem;
-            Leaves[index].Add(ent.MagicNumber % pow10StemSize);
+            // Fairly patchwork fix; Dotplots only ever use ints, so it's probably fine. 
+            // Me in the future is going to be pissed.
+            int index = (int) ent.MagicNumber / pow10StemSize - SmallestStem;
+            Leaves[index].Add((int) ent.MagicNumber % pow10StemSize);
         }
         foreach (List<int> leaves in Leaves) leaves.Sort();
     }

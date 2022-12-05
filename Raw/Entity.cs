@@ -2,13 +2,13 @@ namespace Statistics;
 
 class Entity : IComparable<Entity>
 {
-    public int MagicNumber {get; set;}
-    public int MagicSecondNumber {get; set;}
+    public double MagicNumber {get; set;}
+    public double MagicSecondNumber {get; set;}
     private static Random Generator {get; set;} = new Random(1);
 
-    public Entity() : this(Generator.Next(1, 100)) {}
-    public Entity(int MagicNumber) : this(MagicNumber, Generator.Next(1, 100)) {}
-    public Entity(int MagicNumber, int MagicSecondNumber)
+    public Entity() : this(Generator.NextDouble() * 100) {}
+    public Entity(double MagicNumber) : this(MagicNumber, Generator.NextDouble() * 100) {}
+    public Entity(double MagicNumber, double MagicSecondNumber)
     {
         this.MagicNumber = MagicNumber;
         // Will I ever use the second magic number? 
@@ -37,7 +37,7 @@ class Entity : IComparable<Entity>
     // Screw it, IComparable. 
     public int CompareTo(Entity? other) 
     {
-        if (ReferenceEquals(null, other)) return this.MagicNumber;
+        if (ReferenceEquals(null, other)) return 1;
         return this.MagicNumber.CompareTo(other.MagicNumber);   
     }
 }

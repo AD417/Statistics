@@ -2,8 +2,8 @@ namespace Statistics;
 
 class NormalDistribution
 {
-    public double Mean {get; }
-    public double Stdev {get; }
+    public double Mean {get; set; }
+    public double Stdev {get; set; }
 
     private bool showWork {get; } = false;
     private String tab {get; set; } = "    ";
