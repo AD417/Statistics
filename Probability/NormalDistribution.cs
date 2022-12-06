@@ -5,10 +5,10 @@ class NormalDistribution
     public double Mean {get; set; }
     public double Stdev {get; set; }
 
-    private bool showWork {get; } = false;
+    protected bool showWork {get; set; } = false;
     private String tab {get; set; } = "    ";
 
-    private static int precision = 4;
+    protected static int precision = 2;
     public static int Precision {
         set
         {
@@ -22,6 +22,7 @@ class NormalDistribution
         Mean = mean;
         Stdev = stdev;
     }
+    public NormalDistribution() : this(0, 1) {}
 
     public NormalDistribution(double mean, double stdev, bool _showWork) : this(mean, stdev)
     {
@@ -30,7 +31,7 @@ class NormalDistribution
         {
             System.Console.WriteLine(); // Free newline.
             System.Console.WriteLine($"μ = {Mean}");
-            System.Console.WriteLine($"σ = {Stdev}");
+            System.Console.WriteLine($"σ = {Math.Round(Stdev, precision + 1)}");
             System.Console.WriteLine();
         }
     }
@@ -49,7 +50,7 @@ class NormalDistribution
     public double ZScoreFor(double x)
     {
         double output = Math.Round((x - Mean) / Stdev, precision);
-        if (showWork) System.Console.WriteLine($"z = (x - u) / s = ({x} - {Mean}) / {Stdev} = {output} ");
+        if (showWork) System.Console.WriteLine($"z = (x - u) / s = ({x} - {Mean}) / {Math.Round(Stdev, precision + 1)} = {output} ");
         return output;
     }
 
@@ -94,7 +95,8 @@ class NormalDistribution
         double minZ = ZScoreFor(minX);
         if (showWork) System.Console.Write(tab);
         double maxZ = ZScoreFor(maxX);
-        if (showWork) System.Console.Write(tab); ZScore.Between(minZ, maxZ);
+        if (showWork) System.Console.Write(tab); 
+        System.Console.Write($"P(x < {minX} or x > {maxX}) = ");  ZScore.Outside(minZ, maxZ);
         System.Console.WriteLine();
     }
 
@@ -102,7 +104,7 @@ class NormalDistribution
     {
         double maxZScore = ZScore.FromProbability(maxProbability);
 
-        System.Console.WriteLine($"P(z' < z) = {maxProbability}");
+        System.Console.WriteLine($"P(z' < z) = {Math.Round(maxProbability, ZScore.Precision)}");
         System.Console.Write(tab);
         System.Console.WriteLine($"z' = {maxZScore}");
         System.Console.Write(tab);
@@ -113,7 +115,7 @@ class NormalDistribution
     {
         double minZScore = ZScore.FromProbability(minProbability);
 
-        System.Console.WriteLine($"P(z' > z) = {minProbability}");
+        System.Console.WriteLine($"P(z' > z) = {Math.Round(minProbability, ZScore.Precision)}");
         System.Console.Write(tab);
         System.Console.WriteLine($"z' = {minZScore}");
         System.Console.Write(tab);
@@ -123,7 +125,9 @@ class NormalDistribution
     public void TopPercent(double percentile)
     {
         double cutoffProbability = 1 - (percentile * 0.01);
-        System.Console.WriteLine($"Top {percentile}% = Better than {cutoffProbability} of data");
+        System.Console.WriteLine(
+            $"Top {percentile}% = Better than {Math.Round(cutoffProbability, ZScore.Precision)} of data"
+        );
         System.Console.Write(tab);
         MinimumValueForP(cutoffProbability);
     }
@@ -131,8 +135,21 @@ class NormalDistribution
     public void BottomPercent(double percentile)
     {
         double cutoffProbability = (percentile * 0.01);
-        System.Console.WriteLine($"Bottom {percentile}% = At best {cutoffProbability} of data");
+        System.Console.WriteLine(
+            $"Bottom {percentile}% = At best {Math.Round(cutoffProbability, ZScore.Precision)} of data"
+        );
         System.Console.Write(tab);
         MaximumValueForP(cutoffProbability);
+    }
+
+    public void MiddlePercent(double percentile)
+    {
+        double maxProbability = 0.5 + percentile / 200;
+        double minProbability = 0.5 - percentile / 200;
+        System.Console.WriteLine(
+            $"Middle {percentile}% = Between {Math.Round(minProbability, ZScore.Precision)} and {Math.Round(maxProbability, ZScore.Precision)} of data"
+        );
+        System.Console.Write(tab);
+        MaximumValueForP(maxProbability);
     }
 }

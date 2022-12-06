@@ -12,6 +12,7 @@ class ZScore
             if (value <= 0) throw new Exception("Invalid number of digits of precision!");
             precision = value;
         }
+        get => precision;
     }
 
     private static double[] cache = new double[800];
