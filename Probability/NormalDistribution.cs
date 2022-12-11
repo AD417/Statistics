@@ -4,9 +4,7 @@ class NormalDistribution
 {
     public double Mean {get; set; }
     public double Stdev {get; set; }
-
-    protected bool showWork {get; set; } = false;
-    private String tab {get; set; } = "    ";
+    private static String tab {get; set; } = "    ";
 
     protected static int precision = 2;
     public static int Precision {
@@ -17,31 +15,24 @@ class NormalDistribution
         }
     }
 
+
     public NormalDistribution(double mean, double stdev)
     {
         Mean = mean;
         Stdev = stdev;
+        System.Console.WriteLine(); // Free newline.
+        System.Console.WriteLine($"μ = {Mean}");
+        System.Console.WriteLine($"σ = {Math.Round(Stdev, precision + 1)}");
+        System.Console.WriteLine();
     }
     public NormalDistribution() : this(0, 1) {}
-
-    public NormalDistribution(double mean, double stdev, bool _showWork) : this(mean, stdev)
-    {
-        showWork = _showWork;
-        if (showWork)
-        {
-            System.Console.WriteLine(); // Free newline.
-            System.Console.WriteLine($"μ = {Mean}");
-            System.Console.WriteLine($"σ = {Math.Round(Stdev, precision + 1)}");
-            System.Console.WriteLine();
-        }
-    }
 
     public double FromZScore(double z)
     {
         return Mean + z * Stdev;
     }
 
-    public void setTabLength(int tabSize)
+    public static void setTabLength(int tabSize)
     {
         tab = "";
         for (int i = 0; i < tabSize; i++) tab += " ";
@@ -50,76 +41,80 @@ class NormalDistribution
     public double ZScoreFor(double x)
     {
         double output = Math.Round((x - Mean) / Stdev, precision);
-        if (showWork) System.Console.WriteLine($"z = (x - u) / s = ({x} - {Mean}) / {Math.Round(Stdev, precision + 1)} = {output} ");
+        System.Console.WriteLine($"z = (x - u) / s = ({x} - {Mean}) / {Math.Round(Stdev, precision + 1)} = {output} ");
         return output;
     }
 
-    public void LessThan(double x)
+    public double LessThan(double x)
     {
         double z = ZScoreFor(x);
-        if (showWork) System.Console.Write(tab); 
-        System.Console.Write($"P(x < {x}) = "); ZScore.LeftOf(z);
+        System.Console.Write(tab); 
+        System.Console.Write($"P(x < {x}) = "); 
+        double probability = ZScore.LeftOf(z);
         System.Console.WriteLine();
+        return probability;
     }
 
-    public void MoreThan(double x)
+    public double MoreThan(double x)
     {
         double z = ZScoreFor(x);
-        if (showWork) System.Console.Write(tab); 
-        System.Console.Write($"P(x > {x}) = "); ZScore.RightOf(z);
+        System.Console.Write(tab); 
+        System.Console.Write($"P(x > {x}) = "); 
+        double probability = ZScore.RightOf(z);
         System.Console.WriteLine();
+        return probability;
     }
 
-    public void Between(double minX, double maxX)
+    public double Between(double minX, double maxX)
     {
-        if (maxX < minX) 
-        {
-            Between(maxX, minX);
-            return;
-        }
+        if (maxX < minX) return Between(maxX, minX);
+
         double minZ = ZScoreFor(minX);
-        if (showWork) System.Console.Write(tab);
+        System.Console.Write(tab);
         double maxZ = ZScoreFor(maxX);
-        if (showWork) System.Console.Write(tab); 
-        System.Console.Write($"P({minX} < x < {maxX}) = "); ZScore.Between(minZ, maxZ);  
+        System.Console.Write(tab); 
+        System.Console.Write($"P({minX} < x < {maxX}) = "); 
+        double probability = ZScore.Between(minZ, maxZ);  
         System.Console.WriteLine();
+        return probability;
     }
 
-    public void Outside(double minX, double maxX)
+    public double Outside(double minX, double maxX)
     {
-        if (maxX < minX) 
-        {
-            Between(maxX, minX);
-            return;
-        }
+        if (maxX < minX) return Between(maxX, minX);
+
         double minZ = ZScoreFor(minX);
-        if (showWork) System.Console.Write(tab);
+        System.Console.Write(tab);
         double maxZ = ZScoreFor(maxX);
-        if (showWork) System.Console.Write(tab); 
-        System.Console.Write($"P(x < {minX} or x > {maxX}) = ");  ZScore.Outside(minZ, maxZ);
+        System.Console.Write(tab); 
+        System.Console.Write($"P(x < {minX} or x > {maxX}) = "); 
+        double probability = ZScore.Outside(minZ, maxZ);
         System.Console.WriteLine();
+        return probability;
     }
 
-    public void MaximumValueForP(double maxProbability)
+    public double MaximumValueForP(double maxProbability)
     {
         double maxZScore = ZScore.FromProbability(maxProbability);
-
+        double x = FromZScore(maxZScore);
         System.Console.WriteLine($"P(z' < z) = {Math.Round(maxProbability, ZScore.Precision)}");
         System.Console.Write(tab);
         System.Console.WriteLine($"z' = {maxZScore}");
         System.Console.Write(tab);
-        System.Console.WriteLine($"x = μ + zσ = {FromZScore(maxZScore)}");
+        System.Console.WriteLine($"x = μ + zσ = {x}");
+        return x;
     }
 
     public void MinimumValueForP(double minProbability)
     {
         double minZScore = ZScore.FromProbability(minProbability);
-
+        double x = FromZScore(minZScore);
         System.Console.WriteLine($"P(z' > z) = {Math.Round(minProbability, ZScore.Precision)}");
         System.Console.Write(tab);
         System.Console.WriteLine($"z' = {minZScore}");
         System.Console.Write(tab);
         System.Console.WriteLine($"x = μ + zσ = {FromZScore(minZScore)}");
+        
     }
 
     public void TopPercent(double percentile)

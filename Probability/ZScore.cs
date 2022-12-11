@@ -2,7 +2,7 @@ namespace Statistics;
 
 class ZScore
 {
-    // Hardcoded constant that I don't feel like recalculating. 
+    // Hardcoded constant that seems like frivolous math. 
     private static double denominator = 1 / Math.Sqrt(2 * Math.PI);
 
     private static int precision = 4;
@@ -15,10 +15,9 @@ class ZScore
         get => precision;
     }
 
-    private static double[] cache = new double[800];
-
     private static double f(double x)
     {
+        // e^(-x^2/2) / sqrt(2pi)
         return Math.Pow(Math.E, -(x * x * 0.5)) * denominator;
     }
 
@@ -61,49 +60,45 @@ class ZScore
         return Math.Round(currentGuess, 2);
     }
 
-    public static void FillCache()
-    {
-        for (int i = 0; i < 800; i++) cache[i] = f((i - 400) * 0.01);
-        for (int i = 0; i < 800; i++) System.Console.WriteLine(cache[i]);
-    }
-
     private static double Score(double z) => Integrate(-4.5, z);
 
-    public static void LeftOf(double z)
+    public static double LeftOf(double z)
     {
-        System.Console.WriteLine($"P(z < {z}) = {Score(z)}");
+        double probability = Score(z);
+        System.Console.WriteLine($"P(z < {z}) = {probability}");
+        return probability;
     }
 
-    public static void RightOf(double z)
+    public static double RightOf(double z)
     {
-        System.Console.WriteLine($"P(z > {z}) = P(z < {-z}) = {Score(-z)}");
+        double probability = Score(-z);
+        System.Console.WriteLine($"P(z > {z}) = P(z < {-z}) = {probability}");
+        return probability;
     }
 
-    public static void Between(double minZ, double maxZ)
+    public static double Between(double minZ, double maxZ)
     {
-        if (minZ > maxZ) 
-        {
-            Between(maxZ, minZ);
-            return;
-        }
+        if (minZ > maxZ) return Between(maxZ, minZ);
+
         double Pmax = Score(maxZ);
         double Pmin = Score(minZ);
+        double probability = Math.Round(Pmax - Pmin, precision);
         System.Console.WriteLine(
-            $"P({minZ} < z < {maxZ}) = P(z < {maxZ}) - P(z < {minZ}) = {Pmax} - {Pmin} = {Math.Round(Pmax - Pmin, precision)}"
+            $"P({minZ} < z < {maxZ}) = P(z < {maxZ}) - P(z < {minZ}) = {Pmax} - {Pmin} = {probability}"
         );
+        return probability;
     }
 
-    public static void Outside(double minZ, double maxZ)
+    public static double Outside(double minZ, double maxZ)
     {
-        if (minZ > maxZ) 
-        {
-            Between(maxZ, minZ);
-            return;
-        }
+        if (minZ > maxZ) return Between(maxZ, minZ);
+
         double Pmax = Score(-maxZ);
         double Pmin = Score(minZ);
+        double probability = Math.Round(Pmin + Pmax, precision);
         System.Console.WriteLine(
-            $"P(z < {minZ} or z > {maxZ}) = P(z < {minZ}) + P(z < {-maxZ}) = {Pmin} + {Pmax} = {Math.Round(Pmin + Pmax, precision)}"
+            $"P(z < {minZ} or z > {maxZ}) = P(z < {minZ}) + P(z < {-maxZ}) = {Pmin} + {Pmax} = {probability}"
         );
+        return probability;
     }
 }

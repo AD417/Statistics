@@ -1,7 +1,69 @@
 namespace Statistics;
 
-class BinomialDistribution
+class BinomialDistribution : NormalDistribution
 {
+    private int trials;
+    private double successChance;
+    public int Trials
+    {
+        get => trials;
+        set
+        {
+            if (value <= 0) throw new Exception("Invalid trials count!");
+            if (value * Math.Min(successChance, 1 - successChance) < 5)
+                System.Console.WriteLine("Warning: Insufficient certainty to force a Normal Approximation!");
+            
+            trials = value;
+        }
+    }
+    public double SuccessChance
+    {
+        get => successChance;
+        set
+        {
+            if (value < 0 || value > 1) throw new Exception("Invalid success Chance!");
+            if (trials * Math.Min(value, 1 - value) < 5)
+                System.Console.WriteLine("Warning: Insufficient certainty to force a Normal Approximation!");
+
+            successChance = value;
+        }
+    }
+    public double FailureChance
+    {
+        get => 1 - successChance;
+    }
+
+
+    private BinomialDistribution(int trials, double successChance) : base() 
+    { 
+        double failureChance = 1 - successChance;
+        double certainty = trials * Math.Min(successChance, failureChance);
+
+        System.Console.WriteLine($"Binomial Distribution certainty: {Math.Round(certainty, 4)}");
+
+        if (certainty < 5)
+            System.Console.WriteLine("Warning: Insufficent certainty to force a Normal Approximation.");
+        
+        this.trials = trials;
+        this.successChance = successChance;
+        Mean = trials * successChance;
+        Stdev = Mean * failureChance;
+    }
+
+    public static BinomialDistribution GenerateApproximateDistribution(int trials, double successChance)
+    {
+        double failureChance = 1 - successChance;
+
+        double certainty = trials * Math.Min(successChance, failureChance);
+
+        System.Console.WriteLine($"Binomial Distribution certainty: {Math.Round(certainty, 4)}");
+
+        if (certainty < 5)
+            System.Console.WriteLine("Warning: Insufficent certainty to force a Normal Approximation.");
+        
+        return new BinomialDistribution(trials, successChance);
+    }
+
     public static double ExactOutcome(int trials, int successes, double successChance)
     {
         if (successes > trials) 
