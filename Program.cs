@@ -2,9 +2,13 @@
 
 class Program
 {
-    public static int Main()
+    public static int Main(string[] args)
     {
-        NormalDistribution nd = new SampleDistribution(64.2, 2.9, 60);
+        BinomialDistribution nd = new BinomialDistribution(20, 0.5);
+
+        nd.Summarize();
+        System.Console.Write(" 1) "); nd.Exactly(10);
+
         return 0;
     }
 }

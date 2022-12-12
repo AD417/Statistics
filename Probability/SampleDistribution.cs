@@ -24,14 +24,13 @@ class SampleDistribution : NormalDistribution
         Stdev = 1; // TODO: FIX THIS CRAP!!!
     }
 
-    public SampleDistribution(double mean, double stdev, int sampleSize) : base(mean, stdev / Math.Sqrt(sampleSize), false) 
+    public SampleDistribution(double mean, double stdev, int sampleSize) : base(mean, stdev / Math.Sqrt(sampleSize)) 
     {
-        showWork = true;
         if (sampleSize < 30) System.Console.WriteLine("WARNING: n < 30. Make sure the data is normally distributed!"); 
         System.Console.WriteLine($"μ = {mean}  (n = {sampleSize})  {Mean}");
         System.Console.WriteLine($"σ = {Math.Round(stdev, precision + 1)} --------> {Math.Round(Stdev, precision + 1)}");
     }
-    public SampleDistribution(double mean, double stdev) : base(mean, stdev, true) {}
+    public SampleDistribution(double mean, double stdev) : base(mean, stdev) {}
 
     public SampleDistribution ConvertToSampleDistribution(NormalDistribution nd, int trials)
     {

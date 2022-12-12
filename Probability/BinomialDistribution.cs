@@ -32,14 +32,14 @@ class BinomialDistribution : NormalDistribution
     {
         get => 1 - successChance;
     }
-
-
-    private BinomialDistribution(int trials, double successChance) : base() 
+    public double Certainty 
+    {
+        get => Trials * Math.Min(SuccessChance, FailureChance);
+    }
+    public BinomialDistribution(int trials, double successChance) : base() 
     { 
         double failureChance = 1 - successChance;
         double certainty = trials * Math.Min(successChance, failureChance);
-
-        System.Console.WriteLine($"Binomial Distribution certainty: {Math.Round(certainty, 4)}");
 
         if (certainty < 5)
             System.Console.WriteLine("Warning: Insufficent certainty to force a Normal Approximation.");
@@ -50,20 +50,85 @@ class BinomialDistribution : NormalDistribution
         Stdev = Mean * failureChance;
     }
 
-    public static BinomialDistribution GenerateApproximateDistribution(int trials, double successChance)
+    public override void Summarize()
     {
-        double failureChance = 1 - successChance;
-
-        double certainty = trials * Math.Min(successChance, failureChance);
-
-        System.Console.WriteLine($"Binomial Distribution certainty: {Math.Round(certainty, 4)}");
-
-        if (certainty < 5)
-            System.Console.WriteLine("Warning: Insufficent certainty to force a Normal Approximation.");
-        
-        return new BinomialDistribution(trials, successChance);
+        System.Console.WriteLine($"Trials = {Trials}");
+        System.Console.WriteLine($"p = {successChance}, q = {FailureChance}");
+        base.Summarize();
+        System.Console.WriteLine($"Certainty = {Certainty}");
+        System.Console.WriteLine(); // Add a line at the end.
     }
 
+
+    public override double LessThan(double c)
+    {
+        double x = c - 0.5;
+        System.Console.WriteLine($"P(c < {c}) = P(x < {x})");
+        System.Console.Write(tab);
+        return base.LessThan(x);
+    }
+    
+    public double AtMost(double c)
+    {
+        double x = c + 0.5;
+        System.Console.WriteLine($"P(c <= {c}) = P(x < {x})");
+        System.Console.Write(tab);
+        return base.LessThan(x);
+    }
+
+    public override double MoreThan(double c)
+    {
+        double x = c + 0.5;
+        System.Console.WriteLine($"P(c > {c}) = P(x > {x})");
+        System.Console.Write(tab);
+        return base.MoreThan(x);
+    }
+    
+    public double AtLeast(double c)
+    {
+        double x = c - 0.5;
+        System.Console.WriteLine($"P(c >= {c}) = P(x > {x})");
+        System.Console.Write(tab);
+        return base.MoreThan(x);
+    }
+
+    public override double Between(double minC, double maxC)
+    {
+        if (maxC < minC) return Between(maxC, minC);
+        // Exclusive -- use BetweenInclusive to include the bounds.
+        double minX = minC + 0.5;
+        double maxX = maxC - 0.5;
+
+        System.Console.WriteLine($"P({minC} < c < {maxC}) = P({minX} < x < {maxX})");
+        System.Console.Write(tab);
+        return base.Between(minX, maxX);
+
+    }
+
+    public double BetweenInclusive(double minC, double maxC)
+    {
+        if (maxC < minC) return BetweenInclusive(maxC, minC);
+        // Exclusive -- use BetweenInclusive to include the bounds.
+        double minX = minC - 0.5;
+        double maxX = maxC + 0.5;
+
+        System.Console.WriteLine($"P({minC} <= c <= {maxC}) = P({minX} < x < {maxX})");
+        System.Console.Write(tab);
+        return base.Between(minX, maxX);
+
+    }
+
+    public double Exactly(double c)
+    {
+        double minX = c - 0.5;
+        double maxX = c + 0.5;
+        System.Console.WriteLine($"P(c = {c}) = P({minX} < x < {maxX})");
+        System.Console.Write(tab);
+        return base.Between(minX, maxX);
+    }
+
+    // Legacy stuff. Still useful for low trial count stuff, and at least the naming scheme is out of the way, 
+    // but I'm not sure what to do with it. Move it to another class? 
     public static double ExactOutcome(int trials, int successes, double successChance)
     {
         if (successes > trials) 

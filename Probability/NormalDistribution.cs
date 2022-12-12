@@ -4,9 +4,9 @@ class NormalDistribution
 {
     public double Mean {get; set; }
     public double Stdev {get; set; }
-    private static String tab {get; set; } = "    ";
+    public static String tab {get; set; } = "    ";
 
-    protected static int precision = 2;
+    public static int precision = 2;
     public static int Precision {
         set
         {
@@ -20,12 +20,14 @@ class NormalDistribution
     {
         Mean = mean;
         Stdev = stdev;
-        System.Console.WriteLine(); // Free newline.
-        System.Console.WriteLine($"μ = {Mean}");
-        System.Console.WriteLine($"σ = {Math.Round(Stdev, precision + 1)}");
-        System.Console.WriteLine();
     }
     public NormalDistribution() : this(0, 1) {}
+
+    public virtual void Summarize()
+    {
+        System.Console.WriteLine($"μ = {Mean}");
+        System.Console.WriteLine($"σ = {Math.Round(Stdev, precision + 1)}");
+    }
 
     public double FromZScore(double z)
     {
@@ -38,14 +40,14 @@ class NormalDistribution
         for (int i = 0; i < tabSize; i++) tab += " ";
     }
 
-    public double ZScoreFor(double x)
+    public virtual double ZScoreFor(double x)
     {
         double output = Math.Round((x - Mean) / Stdev, precision);
         System.Console.WriteLine($"z = (x - u) / s = ({x} - {Mean}) / {Math.Round(Stdev, precision + 1)} = {output} ");
         return output;
     }
 
-    public double LessThan(double x)
+    public virtual double LessThan(double x)
     {
         double z = ZScoreFor(x);
         System.Console.Write(tab); 
@@ -55,7 +57,7 @@ class NormalDistribution
         return probability;
     }
 
-    public double MoreThan(double x)
+    public virtual double MoreThan(double x)
     {
         double z = ZScoreFor(x);
         System.Console.Write(tab); 
@@ -65,7 +67,7 @@ class NormalDistribution
         return probability;
     }
 
-    public double Between(double minX, double maxX)
+    public virtual double Between(double minX, double maxX)
     {
         if (maxX < minX) return Between(maxX, minX);
 
@@ -79,7 +81,7 @@ class NormalDistribution
         return probability;
     }
 
-    public double Outside(double minX, double maxX)
+    public virtual double Outside(double minX, double maxX)
     {
         if (maxX < minX) return Between(maxX, minX);
 
