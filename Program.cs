@@ -4,10 +4,14 @@ class Program
 {
     public static int Main(string[] args)
     {
-        BinomialDistribution nd = new BinomialDistribution(20, 0.5);
+        System.Console.WriteLine(ZScore.LeftOf(3));
+        System.Console.WriteLine(ZScore.LeftOf(2));
+        System.Console.WriteLine(ZScore.LeftOf(1));
+        System.Console.WriteLine(ZScore.LeftOf(0));
+        System.Console.WriteLine(ZScore.LeftOf(-1));
+        System.Console.WriteLine(ZScore.LeftOf(-2));
+        System.Console.WriteLine(ZScore.LeftOf(-3));
 
-        nd.Summarize();
-        System.Console.Write(" 1) "); nd.Exactly(10);
 
         return 0;
     }

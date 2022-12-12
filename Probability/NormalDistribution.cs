@@ -25,7 +25,7 @@ class NormalDistribution
 
     public virtual void Summarize()
     {
-        System.Console.WriteLine($"μ = {Mean}");
+        System.Console.WriteLine($"μ = {Math.Round(Mean, precision)}");
         System.Console.WriteLine($"σ = {Math.Round(Stdev, precision + 1)}");
     }
 
@@ -43,7 +43,7 @@ class NormalDistribution
     public virtual double ZScoreFor(double x)
     {
         double output = Math.Round((x - Mean) / Stdev, precision);
-        System.Console.WriteLine($"z = (x - u) / s = ({x} - {Mean}) / {Math.Round(Stdev, precision + 1)} = {output} ");
+        System.Console.WriteLine($"z = (x - u) / s = ({x} - {Math.Round(Mean, precision)}) / {Math.Round(Stdev, precision + 1)} = {output} ");
         return output;
     }
 

@@ -11,7 +11,7 @@ class BinomialDistribution : NormalDistribution
         {
             if (value <= 0) throw new Exception("Invalid trials count!");
             if (value * Math.Min(successChance, 1 - successChance) < 5)
-                System.Console.WriteLine("Warning: Insufficient certainty to force a Normal Approximation!");
+                System.Console.WriteLine("Warning: Insufficient checksum to force a Normal Approximation!");
             
             trials = value;
         }
@@ -23,7 +23,7 @@ class BinomialDistribution : NormalDistribution
         {
             if (value < 0 || value > 1) throw new Exception("Invalid success Chance!");
             if (trials * Math.Min(value, 1 - value) < 5)
-                System.Console.WriteLine("Warning: Insufficient certainty to force a Normal Approximation!");
+                System.Console.WriteLine("Warning: Insufficient checksum to force a Normal Approximation!");
 
             successChance = value;
         }
@@ -32,30 +32,32 @@ class BinomialDistribution : NormalDistribution
     {
         get => 1 - successChance;
     }
-    public double Certainty 
+    public double Checksum 
     {
         get => Trials * Math.Min(SuccessChance, FailureChance);
     }
     public BinomialDistribution(int trials, double successChance) : base() 
     { 
         double failureChance = 1 - successChance;
-        double certainty = trials * Math.Min(successChance, failureChance);
+        double checksum = trials * Math.Min(successChance, failureChance);
 
-        if (certainty < 5)
-            System.Console.WriteLine("Warning: Insufficent certainty to force a Normal Approximation.");
+        if (checksum < 5)
+            System.Console.WriteLine("Warning: Insufficent trial count to force a Normal Approximation.");
         
         this.trials = trials;
         this.successChance = successChance;
         Mean = trials * successChance;
-        Stdev = Mean * failureChance;
+        Stdev = Math.Sqrt(Mean * failureChance);
     }
 
     public override void Summarize()
     {
         System.Console.WriteLine($"Trials = {Trials}");
-        System.Console.WriteLine($"p = {successChance}, q = {FailureChance}");
+        System.Console.WriteLine(
+            $"p = {Math.Round(successChance, precision)}, q = {Math.Round(FailureChance, precision)}"
+        );
         base.Summarize();
-        System.Console.WriteLine($"Certainty = {Certainty}");
+        System.Console.WriteLine($"Checksum = {Math.Round(Checksum, precision)}");
         System.Console.WriteLine(); // Add a line at the end.
     }
 
