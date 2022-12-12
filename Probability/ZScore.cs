@@ -21,18 +21,40 @@ class ZScore
         return Math.Pow(Math.E, -(x * x * 0.5)) * denominator;
     }
 
-    private static double Integrate(double min, double max)
+    private static double Integrate(double x)
     {
-        double sum = 0;
-        double delta = (max - min) / 2000; 
-        double thismin = min;
-        // Simpson's rule. There exists no elementary integral for f(x). 
-        for (int i = 0; i < 2000; i++)
+        // Integrate the normal distribution function from 0 to x, for any value of x, to the precison 
+        // required by ZScore.precision.
+        
+        // The normal distribution function is e^(-x^2/2) / sqrt(2pi). This function has no elementary integral.
+        // To circumvent this problem, we convert that function to a taylor series, integrate that series,
+        // and then sum up the terms when we put in x. 
+
+        // The taylor series is:
+        // f(x) = (1 - x^2 + x^4 / 2 - x^6 / 6 + x^8 / 24 - ...) / sqrt(2pi)
+        // Which is exactly the same as e^x, but we replace x with -x^2/2, and divide the entire
+        // expression by sqrt(2pi) at the end. 
+
+        // The integral is therefore:
+        // F(x) = x - x^3/3 + x^5/10 - x^7 / 42 + x^9 / 216 - ...) / sqrt(2pi).
+
+        // Since this can go on for an arbitrary number of terms, we must allow the series to continue 
+        // for as long as necessary, until acceptable precision is reached. 
+
+        double exponent = x * x * -0.5;
+        double sum = x;
+        double term = x;
+        double epsilon = Math.Pow(0.1, precision + 1);
+
+        for (int i = 1; Math.Abs(term) > epsilon; i++)
         {
-            sum += delta / 6 * (f(thismin) + 4 * f(thismin + delta * 0.5) + f(thismin + delta));
-            thismin += delta;
+            // Conversion between terms in the series. Minimizes floating point errors. 
+            term *= exponent;
+            term *= (2 * (double)i - 1) / (2 * (double)i + 1) / i;
+
+            sum += term;
         }
-        return Math.Round(sum, precision);
+        return sum / Math.Sqrt(2 * Math.PI);
     }
 
     private static double NewtonStep(double currentGuess, double desiredProbability)
@@ -60,7 +82,7 @@ class ZScore
         return Math.Round(currentGuess, 2);
     }
 
-    private static double Score(double z) => Integrate(-4.5, z);
+    private static double Score(double z) => Math.Round(0.5 + Integrate(z), precision);
 
     public static double LeftOf(double z)
     {
