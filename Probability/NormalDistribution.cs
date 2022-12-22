@@ -23,11 +23,16 @@ class NormalDistribution
     }
     public NormalDistribution() : this(0, 1) {}
 
+    public virtual bool AssertNormalDistribution() => true;
+
     public virtual void Summarize()
     {
         System.Console.WriteLine($"μ = {Math.Round(Mean, precision)}");
         System.Console.WriteLine($"σ = {Math.Round(Stdev, precision + 1)}");
     }
+
+    public SampleDistribution toSampleDistribution(int sampleSize) 
+        => new SampleDistribution(Mean, Stdev, sampleSize);
 
     public double FromZScore(double z)
     {
@@ -148,5 +153,17 @@ class NormalDistribution
         );
         System.Console.Write(tab);
         MaximumValueForP(maxProbability);
+    }
+
+    public int MinimumSampleForError(double confidence, double error)
+    {
+        if (confidence < 0 || confidence > 1) throw new Exception("Invalid confidence!");
+        System.Console.WriteLine("n = (zc * σ / E)^2");
+        System.Console.WriteLine(tab);
+        double zConfidence = ZScore.CriticalValueForConfidence(confidence);
+        double sqrtSample = zConfidence * Stdev / error;
+        int minimumSample = (int) Math.Ceiling(sqrtSample * sqrtSample);
+        System.Console.WriteLine($"n = ({zConfidence} * {Stdev} / {error})^2 = {minimumSample}");
+        return minimumSample;
     }
 }

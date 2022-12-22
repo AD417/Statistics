@@ -50,6 +50,8 @@ class BinomialDistribution : NormalDistribution
         Stdev = Math.Sqrt(Mean * failureChance);
     }
 
+    public override bool AssertNormalDistribution() => Checksum >= 5;
+
     public override void Summarize()
     {
         System.Console.WriteLine($"Trials = {Trials}");

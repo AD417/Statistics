@@ -1,6 +1,6 @@
 namespace Statistics;
 
-class ZScore
+static class ZScore
 {
     // Hardcoded constant that seems like frivolous math. 
     private static double denominator = 1 / Math.Sqrt(2 * Math.PI);
@@ -72,6 +72,7 @@ class ZScore
 
     public static double FromProbability(double probability)
     {
+        if (probability > 1 || probability < 0) throw new Exception($"Invalid Probability: {probability}");
         double currentGuess = 0;
         double lastGuess = -5;
         while (Math.Abs(lastGuess - currentGuess) > 0.004) 
@@ -80,6 +81,16 @@ class ZScore
             currentGuess = NewtonStep(currentGuess, probability);
         }
         return Math.Round(currentGuess, 2);
+    }
+
+    public static double CriticalValueForConfidence(double confidence)
+    {
+        double lowerProbability = Math.Round(0.5 * (1 - confidence), precision);
+        double zCritical = -FromProbability(lowerProbability);
+        System.Console.WriteLine($"P(-zc < z < zc) = {confidence}");
+        System.Console.Write(BinomialDistribution.tab); 
+        System.Console.WriteLine($"P(z < -zc) = {lowerProbability}; zc = {zCritical}");
+        return zCritical;
     }
 
     private static double Score(double z) => Math.Round(0.5 + Integrate(z), precision);
